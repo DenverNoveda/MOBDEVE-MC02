@@ -4,6 +4,119 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#222831"
     tools:context=".WriteReviewActivity">
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="93dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="WRITE A REVIEW FOR"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_selectedMovie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="157dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="157dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="selected-movie"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <ImageView
+        android:id="@+id/iv_moviePhoto"
+        android:layout_width="150dp"
+        android:layout_height="225dp"
+        android:layout_marginStart="131dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="131dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_selectedMovie"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="171dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="171dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Your Rating:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_moviePhoto" />
+
+    <RatingBar
+        android:id="@+id/rb_userReviewRating"
+        android:layout_width="241dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginEnd="85dp"
+        android:scaleX="0.6"
+        android:scaleY="0.6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="133dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="134dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Provide your Explanation:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rb_userReviewRating" />
+
+    <EditText
+        android:id="@+id/et_userReview"
+        android:layout_width="337dp"
+        android:layout_height="183dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="37dp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:inputType="textMultiLine"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui purus, eleifend vitae nisl et, dapibus accumsan augue. Phasellus ut mollis sem, sit amet vulputate purus. Vivamus rutrum commodo nisi, quis varius turpis euismod quis. Nullam ut vulputate dolor. In hac habitasse platea dictumst. Proin convallis blandit tristique. Duis tincidunt, mi nec ultricies condimentum, lorem est pulvinar libero, a egestas orci orci ac metus."
+        android:textColor="#BCBCBC"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+    <Button
+        android:id="@+id/btn_review"
+        android:layout_width="wrap_content"
+        android:layout_height="40sp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="145dp"
+        android:backgroundTint="#393e46"
+        android:text="Send Review"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_userReview" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
