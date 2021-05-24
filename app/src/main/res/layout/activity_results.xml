@@ -4,50 +4,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#222831"
+    android:background="#393e46"
     tools:context=".ResultsActivity">
 
-    <TextView
-        android:id="@+id/tv_resultsSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="28dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="SEARCH BY GENRE/MOST POPULAR/COMING SOON"
-        android:textColor="#eeeeee"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/results_searhBarConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#222831"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_resultsGoToProfile"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/accountbox_icon" />
+
+        <TextView
+            android:id="@+id/tv_resultsSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="SEARCH BY GENRE/MOST POPULAR/COMING SOON"
+            android:textColor="#eeeeee"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_resultsSearchParam"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTintMode="multiply"
+            android:ems="10"
+            android:hint="Search..."
+            android:inputType="textPersonName"
+            android:textColor="#eeeeee"
+            android:textColorHint="#eeeeee"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_resultsSearch" />
+
+        <Button
+            android:id="@+id/btn_resultsSearch"
+            android:layout_width="40sp"
+            android:layout_height="50sp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#d65a31"
+            android:paddingLeft="10dp"
+            android:paddingRight="16dp"
+            android:textSize="12sp"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/search_icon"
+            app:iconTint="#eeeeee"
+            app:layout_constraintStart_toEndOf="@+id/et_resultsSearchParam"
+            app:layout_constraintTop_toBottomOf="@+id/tv_resultsSearch"
+            app:strokeColor="#FFFFFF" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/results_SearchResultRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="152dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/et_resultsSearchParam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="28dp"
-        android:backgroundTint="#EEEEEE"
-        android:backgroundTintMode="multiply"
-        android:ems="10"
-        android:hint="Search..."
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_resultsSearch" />
-
-    <Button
-        android:id="@+id/btn_resultsSearch"
-        android:layout_width="40sp"
-        android:layout_height="40sp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        app:icon="@drawable/search_icon"
-        app:layout_constraintStart_toEndOf="@+id/et_resultsSearchParam"
-        app:layout_constraintTop_toTopOf="@+id/et_resultsSearchParam" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="370dp"
-        android:layout_height="550dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="60dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_resultsSearchParam" />
 </androidx.constraintlayout.widget.ConstraintLayout>

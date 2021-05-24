@@ -6,7 +6,7 @@
     android:layout_width="120dp"
     android:layout_height="160dp"
     android:alwaysDrawnWithCache="false"
-    android:background="#393e46">
+    android:background="#222831">
 
     <ImageView
         android:id="@+id/iv_listItemPoster"
@@ -15,7 +15,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <TextView
         android:id="@+id/tv_listItemName"

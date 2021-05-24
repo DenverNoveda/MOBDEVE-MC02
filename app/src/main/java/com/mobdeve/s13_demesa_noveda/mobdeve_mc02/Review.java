@@ -7,4 +7,5 @@ public class Review {
     private String reviewContent;
     private Date reviewPublished;
     private User reviewAuthor;
+    private int reviewLikes;
 }
