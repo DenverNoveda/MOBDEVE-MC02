@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3C3C3C"
+    android:background="#222831"
     tools:context=".MainMenuActivity">
 
     <TextView
@@ -97,6 +97,7 @@
         android:layout_width="380dp"
         android:layout_height="200dp"
         android:layout_marginTop="16dp"
+        android:scrollbars="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
