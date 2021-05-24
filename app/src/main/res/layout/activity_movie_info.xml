@@ -21,6 +21,7 @@
                 android:id="@+id/iv_movieInfoMain"
                 android:layout_width="200dp"
                 android:layout_height="300dp"
+                android:layout_marginTop="30dp"
                 android:layout_gravity="center_horizontal"
                 app:srcCompat="@android:drawable/ic_menu_gallery" />
 
@@ -36,9 +37,21 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tv_movieInfoCast"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="Person1 | Person 2 | Person3 | Person 4 | Person 5"
+                android:textColor="#eeeeee"
+                android:textSize="15sp"
+                android:layout_marginStart="20dp"/>
+
+            <TextView
                 android:id="@+id/tv_movieInfoSummary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="SUMMARY"
@@ -53,7 +66,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:fontFamily="sans-serif-condensed-light"
-                android:text="TextView"
+                android:text="Description"
                 android:textColor="#eeeeee"
                 android:textSize="15sp" />
 
@@ -67,6 +80,46 @@
                 android:textColor="#eeeeee"
                 app:cornerRadius="5sp" />
 
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="SIMILAR TO THIS"
+                android:textColor="#eeeeee"
+                android:textSize="16sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/movieInfo_RecommendRv"
+                android:layout_width="370dp"
+                android:layout_height="200dp"
+                android:scrollbars="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp" />
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="REVIEWS"
+                android:textColor="#eeeeee"
+                android:textSize="16sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/movieInfo_ReviewRv"
+                android:layout_width="370dp"
+                android:layout_height="200dp"
+                android:scrollbars="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp" />
+
             <Button
                 android:id="@+id/btn_movieInfoReview"
                 android:layout_width="150sp"
@@ -76,27 +129,6 @@
                 android:text="REVIEW"
                 android:textColor="#eeeeee"
                 app:cornerRadius="5sp" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="sans-serif-condensed-medium"
-                android:text="SIMILAR TO THIS"
-                android:textColor="#eeeeee"
-                android:textSize="16sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movieInfo_RecyclerView"
-                android:layout_width="370dp"
-                android:layout_height="200dp"
-
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp" />
-
         </LinearLayout>
     </ScrollView>
 

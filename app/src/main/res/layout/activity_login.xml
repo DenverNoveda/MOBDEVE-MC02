@@ -151,6 +151,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
+    <EditText
+        android:id="@+id/et_registerEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="97dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed-light"
+        android:hint="email"
+        android:inputType="textEmailAddress"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#989898"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_registerPassConfirm" />
+
     <Button
         android:id="@+id/btn_register"
         android:layout_width="wrap_content"
@@ -163,6 +180,6 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_registerPassConfirm" />
+        app:layout_constraintTop_toBottomOf="@+id/et_registerEmail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
