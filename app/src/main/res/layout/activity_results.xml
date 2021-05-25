@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#393e46"
+    android:background="#222831"
     tools:context=".ResultsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/results_searhBarConstraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         android:background="#222831"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -53,16 +53,28 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_resultsSearch" />
 
         <Button
+            android:id="@+id/btn_resultsFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#393e46"
+            android:text="Filter"
+            app:cornerRadius="10dp"
+            app:layout_constraintStart_toEndOf="@+id/btn_resultsSearch"
+            app:layout_constraintTop_toBottomOf="@+id/tv_resultsSearch" />
+
+        <Button
             android:id="@+id/btn_resultsSearch"
             android:layout_width="40sp"
             android:layout_height="50sp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
-            android:backgroundTint="#d65a31"
+            android:backgroundTint="#393e46"
             android:paddingLeft="10dp"
             android:paddingRight="16dp"
             android:textSize="12sp"
-            app:cornerRadius="10dp"
+            app:cornerRadius="15dp"
             app:icon="@drawable/search_icon"
             app:iconTint="#eeeeee"
             app:layout_constraintStart_toEndOf="@+id/et_resultsSearchParam"
@@ -71,12 +83,143 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/results_SearchResultRv"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/results_FilterConstraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="152dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="10dp"
+        android:background="#393e46"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/results_searhBarConstraintLayout">
+
+        <Button
+            android:id="@+id/btn_resultsFilterThriller"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="27dp"
+            android:text="Thriller"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/btn_resultsFilterMystery"
+            app:layout_constraintTop_toTopOf="@+id/btn_resultsFilterMystery" />
+
+        <Button
+            android:id="@+id/btn_resultsFilterAction"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="24dp"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            android:text="Action"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_resultsFilterComedy"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            android:text="Comedy"
+            app:layout_constraintStart_toEndOf="@+id/btn_resultsFilterAction"
+            app:layout_constraintTop_toTopOf="@+id/btn_resultsFilterAction" />
+
+        <Button
+            android:id="@+id/btn_resultsFilterDrama"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            android:text="Drama"
+            app:layout_constraintStart_toEndOf="@+id/btn_resultsFilterComedy"
+            app:layout_constraintTop_toTopOf="@+id/btn_resultsFilterComedy" />
+
+        <Button
+            android:id="@+id/btn_resultsFilterCrime"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            android:text="Crime"
+            app:layout_constraintStart_toStartOf="@+id/btn_resultsFilterAction"
+            app:layout_constraintTop_toBottomOf="@+id/btn_resultsFilterAction" />
+
+        <Button
+            android:id="@+id/btn_resultsFilterRomance"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="16dp"
+            android:text="Romance"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/btn_resultsFilterCrime"
+            app:layout_constraintTop_toBottomOf="@+id/btn_resultsFilterComedy" />
+
+        <Button
+            android:id="@+id/btn_resultsFilterHorror"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="16dp"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            android:text="Horror"
+            app:layout_constraintStart_toEndOf="@+id/btn_resultsFilterRomance"
+            app:layout_constraintTop_toBottomOf="@+id/btn_resultsFilterDrama" />
+
+        <Button
+            android:id="@+id/btn_resultsFilterScifi"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            android:text="Sci-fi"
+            app:layout_constraintStart_toStartOf="@+id/btn_resultsFilterCrime"
+            app:layout_constraintTop_toBottomOf="@+id/btn_resultsFilterCrime" />
+
+        <Button
+            android:id="@+id/btn_resultsFilterMystery"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            android:text="Mystery"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/btn_resultsFilterScifi"
+            app:layout_constraintTop_toTopOf="@+id/btn_resultsFilterScifi" />
+
+        <Button
+            android:id="@+id/btn_resultsFilterAdventure"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Adventure"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@+id/btn_resultsFilterScifi"
+            app:layout_constraintTop_toBottomOf="@+id/btn_resultsFilterScifi" />
+
+        <Button
+            android:id="@+id/btn_resultsFilterFantasy"
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="29dp"
+            android:text="Fantasy"
+            android:textColor="#222831"
+            android:backgroundTint="#eeeeee"
+            app:layout_constraintStart_toEndOf="@+id/btn_resultsFilterAdventure"
+            app:layout_constraintTop_toTopOf="@+id/btn_resultsFilterAdventure" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
