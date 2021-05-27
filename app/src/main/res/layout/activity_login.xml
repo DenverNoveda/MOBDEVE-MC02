@@ -7,50 +7,60 @@
     android:background="#222831"
     tools:context=".LoginActivity">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="127dp"
+        android:layout_height="119dp"
+        android:layout_marginStart="142dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="142dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/logo" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="154dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="154dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="WatchCorner"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
+        android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="188dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="188dp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="Login"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
+        android:layout_marginStart="114dp"
+        android:layout_marginEnd="115dp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:text="Find the best movies to watch."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/et_loginUsername"
+        android:id="@+id/et_loginEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="101dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="101dp"
         android:ems="10"
         android:fontFamily="sans-serif-condensed-light"
-        android:hint="username"
+        android:hint="email"
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
         android:textColorHint="#989898"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -59,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="101dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="101dp"
         android:ems="10"
         android:fontFamily="sans-serif-condensed-light"
@@ -68,118 +78,58 @@
         android:textColor="#FFFFFF"
         android:textColorHint="#989898"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_loginUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/et_loginEmail" />
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="40sp"
         android:layout_marginStart="162dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="162dp"
         android:backgroundTint="#393e46"
+        android:onClick="login"
         android:text="Login"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_loginPass" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/tv_registerLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="179dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="179dp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="Register"
-        android:textColor="#eeeeee"
-        android:textSize="16sp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="112dp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:onClick="register"
+        android:text="Are you new here? Register Now!"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
-    <EditText
-        android:id="@+id/et_registerPassConfirm"
+    <TextView
+        android:id="@+id/tv_resetPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="98dp"
-        android:ems="10"
+        android:layout_marginStart="154dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="155dp"
         android:fontFamily="sans-serif-condensed-light"
-        android:hint="confirm password"
-        android:inputType="textPassword"
+        android:text="Forgot Password?"
         android:textColor="#FFFFFF"
-        android:textColorHint="#989898"
+        android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_registerPass" />
-
-    <EditText
-        android:id="@+id/et_registerPass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="98dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-condensed-light"
-        android:hint="password"
-        android:inputType="textPassword"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#989898"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_registerUsername" />
-
-    <EditText
-        android:id="@+id/et_registerUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="98dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-condensed-light"
-        android:hint="username"
-        android:inputType="textPersonName"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#989898"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-    <EditText
-        android:id="@+id/et_registerEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="97dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-condensed-light"
-        android:hint="email"
-        android:inputType="textEmailAddress"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#989898"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_registerPassConfirm" />
-
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="wrap_content"
-        android:layout_height="40sp"
-        android:layout_marginStart="157dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="158dp"
-        android:backgroundTint="#393e46"
-        android:text="Register"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_registerEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_registerLink" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

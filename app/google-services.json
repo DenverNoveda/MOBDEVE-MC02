@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "671934803842",
+    "project_id": "mobdeve-mco2-demesa-noveda",
+    "storage_bucket": "mobdeve-mco2-demesa-noveda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671934803842:android:6548ae103aef740ad9e99b",
+        "android_client_info": {
+          "package_name": "com.mobdeve.novedad.mobdeve_mc02"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671934803842-os9nbgjtaon3ppk981478esk34ss684c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4w7svA6kcm4VGSVqCiD7XMfVgLpJw8IA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671934803842-os9nbgjtaon3ppk981478esk34ss684c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
