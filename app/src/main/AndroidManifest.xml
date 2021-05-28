@@ -16,16 +16,17 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".GenreSearchActivity" />
         <activity android:name=".RecommendMovieActivity" />
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".WriteReviewActivity" />
-        <activity android:name=".MovieInfoActivity" />
-        <activity android:name=".UserProfileActivity" />
-        <activity android:name=".MainMenuActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".WriteReviewActivity" />
+        <activity android:name=".MovieInfoActivity" />
+        <activity android:name=".UserProfileActivity" />
+        <activity android:name=".MainMenuActivity">
         </activity>
     </application>
 
