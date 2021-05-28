@@ -78,7 +78,7 @@ public class MainMenuActivity extends AppCompatActivity {
         this.tv_searchByGenre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainMenuActivity.this, ResultsActivity.class);
+                Intent i = new Intent(MainMenuActivity.this, TitleSearchActivity.class);
                 startActivity(i);
             }
         });

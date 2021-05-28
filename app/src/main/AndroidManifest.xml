@@ -3,23 +3,24 @@
     package="com.mobdeve.s13_demesa_noveda.mobdeve_mc02">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar"> <!-- android:theme="@style/Theme.MOBDEVEMC02" -->
-        <activity android:name=".RegisterActivity"></activity>
-        <activity android:name=".ResultsActivity" />
+        android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".TitleSearchActivity"></activity>
+        <!-- android:theme="@style/Theme.MOBDEVEMC02" -->
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".GenreSearchActivity" />
         <activity android:name=".RecommendMovieActivity" />
-        <activity android:name=".LoginActivity">
-
-        </activity>
+        <activity android:name=".LoginActivity"></activity>
         <activity android:name=".WriteReviewActivity" />
         <activity android:name=".MovieInfoActivity" />
         <activity android:name=".UserProfileActivity" />
-        <activity android:name=".MainMenuActivity" >
+        <activity android:name=".MainMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
