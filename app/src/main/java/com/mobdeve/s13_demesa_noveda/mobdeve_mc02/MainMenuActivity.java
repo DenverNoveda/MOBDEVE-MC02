@@ -26,7 +26,8 @@ import java.util.List;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    private String address = "";
+    private String addressPop = "";
+    private String addressComingSoon = "";
     private Context context;
     private int listSize;
     private Elements popMoviesListAlpha, popNamesListAlpha, popLinksListAlpha;
@@ -66,8 +67,9 @@ public class MainMenuActivity extends AppCompatActivity {
         resultsComingSoon = new ArrayList<>();
         loadMostPopular();
 //        loadComingSoon();
+
         setUpPopularRecyclerView();
-//
+
         this.tv_seeMorePopular = findViewById(R.id.tv_seeMorePopMovies);
         this.tv_seeMoreComingSoon = findViewById(R.id.tv_seeMoreComingSoonMovies);
         this.tv_searchByGenre = findViewById(R.id.tv_searchByGenre);
@@ -83,12 +85,12 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void loadMostPopular() {
-        address = "https://www.imdb.com/search/title/?groups=top_100";
+        addressPop = "https://www.imdb.com/search/title/?groups=top_100";
         getDataMostPopular();
     }
 
     private void loadComingSoon(){
-        address = "https://www.imdb.com/movies-coming-soon/?ref_=nv_mv_cs";
+        addressComingSoon = "https://www.imdb.com/search/title/?user_rating=8.0,10.0";
         getDataComingSoon();
     }
     private void fillPopularArray(){
@@ -114,12 +116,12 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
     private void getDataMostPopular() {
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
                 try {
-                    doc = Jsoup.connect(address).get();
+                    doc = Jsoup.connect(addressPop).get();
                     popMoviesListAlpha = doc.select(".lister-item");
                     //Get list size
                     listSize = popMoviesListAlpha.size();
@@ -157,15 +159,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         popImgList.add(img.attr("src"));
                         Log.v("Image List Builder",img.attr("src") );
                     }
-
                     Log.v("End", "End of run");
-
-
-                    //Test list by printing
-                    //Iterator iterator = namesList.iterator();
-                    //testWrite(iterator);
-
-
 
                    fillPopularArray();
                    mHandler = new Handler(Looper.getMainLooper());
@@ -177,31 +171,24 @@ public class MainMenuActivity extends AppCompatActivity {
                     });
 
                     Log.v("getData", "Finished ");
-//                    //Create intent
-//                    Intent i = new Intent(context, movieList.class);
-//                    //Pass lists
-//                    i.putStringArrayListExtra("names", (ArrayList<String>)namesList);
-//                    i.putStringArrayListExtra("links", (ArrayList<String>)linksList);
-//                    i.putStringArrayListExtra("img", (ArrayList<String>)imgList);
-//                    //Start activity
-//                    startActivity(i);
-//                    finish();
+
 
                 } catch (IOException e) {
                 }
             }
-        }).start();
+        });
+        thread.start();
     }
 
 
 
     private void getDataComingSoon(){
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
                 try {
-                    doc = Jsoup.connect(address).get();
+                    doc = Jsoup.connect(addressComingSoon).get();
                     soonMoviesListAlpha = doc.select(".lister-item");
                     //Get list size
                     listSize = soonMoviesListAlpha.size();
@@ -248,8 +235,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     //testWrite(iterator);
 
 
-
-                    fillPopularArray();
+                    fillComingSoonArray();
                     mHandler = new Handler(Looper.getMainLooper());
                     mHandler.post(new Runnable() {
                         @Override
@@ -263,7 +249,8 @@ public class MainMenuActivity extends AppCompatActivity {
                 } catch (IOException e) {
                 }
             }
-        }).start();
+        });
+        thread.start();
     }
     public List<String> trimSelection(List<String> list){
         Log.v("getFirstFifty", "Trimming Data");

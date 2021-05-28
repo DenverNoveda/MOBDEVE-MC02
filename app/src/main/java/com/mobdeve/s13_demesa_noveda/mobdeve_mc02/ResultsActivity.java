@@ -3,11 +3,15 @@ package com.mobdeve.s13_demesa_noveda.mobdeve_mc02;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +46,11 @@ public class ResultsActivity extends AppCompatActivity {
     private Document doc;
     private String[] genres = {};
     private ArrayList<Movie> results;
+    private Handler mHandler;
+
+    private RecyclerView results_SearchRecyclerView;
+    private LinearLayoutManager myManager;
+    private MovieListAdapter myAdapter;
 
     private ConstraintLayout results_FilterConstraintLayout;
     private Button btn_searchResults;
@@ -68,7 +77,12 @@ public class ResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-
+        docList = new ArrayList<>();
+        namesList = new ArrayList<>();
+        linksList = new ArrayList<>();
+        imgList = new ArrayList<>();
+        results = new ArrayList<>();
+        setUpRecyclerView();
         this.btn_searchResults = findViewById(R.id.btn_resultsSearch);
         this.et_resultsSearchParam = findViewById(R.id.et_resultsSearchParam);
         this.btn_resultsFilter = findViewById(R.id.btn_resultsFilter);
@@ -90,31 +104,27 @@ public class ResultsActivity extends AppCompatActivity {
             }
         });
     }
+    private void fillResults(){
+        for(int i = 0; i< namesList.size(); i++){
+            Movie movie = new Movie();
+            Log.d("Name", namesList.get(i));
+            Log.d("Link", linksList.get(i));
+            movie.setMovieName(namesList.get(i));
+            movie.setImage(imgList.get(i));
+            movie.setLink(linksList.get(i));
+            results.add(movie);
+        }
+    }
     public void titleSearch(){
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try  {
-                    //Your code goes here
-                    String query = et_resultsSearchParam.getText().toString();
-                    query = query.replace(" ", "+");
-                    OkHttpClient client = new OkHttpClient();
-
-                    Request request = new Request.Builder()
-                            .url("https://movie-database-imdb-alternative.p.rapidapi.com/?s=" + query + "&page=1&r=json")
-                            .get()
-                            .addHeader("x-rapidapi-key", "3046c12cfdmsh5c0c9ec58a780edp111336jsnccb6948110d5")
-                            .addHeader("x-rapidapi-host", "movie-database-imdb-alternative.p.rapidapi.com")
-                            .build();
-
-                    Response response = client.newCall(request).execute();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+        String query = et_resultsSearchParam.getText().toString();
+        query = query.replace(" ", "+");
+        address = "https://m.imdb.com/find?q=" + query + "&s=tt&ttype=ft";
+        if(query.equals("")){
+            Toast.makeText(this, "Please enter a query", Toast.LENGTH_LONG).show();
+        }else{
+            //Start jSoup function
+            getDataTitleSearch();
+        }
         }
     public void genreSearch(View v){
         //Find and set query data
@@ -181,19 +191,19 @@ public class ResultsActivity extends AppCompatActivity {
                         imgList.add(source);
                         Log.v("Image List Builder", source);
                     }
+                    fillResults();
+                    mHandler = new Handler(Looper.getMainLooper());
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            myAdapter.notifyDataSetChanged();
+                        }
+                    });
 
+                    Log.v("getData", "Finished ");
                     Log.v("End", "End of run");
 
 
-                    //Create intent
-//                    Intent i = new Intent(context, MovieList.class);
-//                    //Pass lists
-//                    i.putStringArrayListExtra("names", (ArrayList<String>)namesList);
-//                    i.putStringArrayListExtra("links", (ArrayList<String>)linksList);
-//                    i.putStringArrayListExtra("img", (ArrayList<String>)imgList);
-//                    //Start activity
-//                    startActivity(i);
-//                    finish();
 
                 } catch (IOException e) {
                 }
@@ -201,7 +211,7 @@ public class ResultsActivity extends AppCompatActivity {
         }).start();
     }
     public void getDataTitleSearch(){
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
@@ -238,36 +248,23 @@ public class ResultsActivity extends AppCompatActivity {
                         Document doc2 = docList.get(i);
                         Element poster = doc2.selectFirst(".poster");
                         Element img = poster.selectFirst("img");
-                        String source = img.attr("src");
-                        imgList.add(source);
-                        Log.v("Image List Builder", source);
+                        imgList.add(img.attr("src"));
+                        Log.v("Image List Builder", img.attr("src"));
                     }
                     if(listSize > 10) {
                         namesList = trimSelection(namesList);
                         linksList = trimSelection(linksList);
                         imgList = trimSelection(imgList);
                     }
-
-                    //Test list by printing
-                    //Iterator iterator = namesList.iterator();
-                    //testWrite(iterator);
-
+                    
                     Log.v("getData", "Finished");
-
-//                    //Create intent
-//                    Intent i = new Intent(context, movieList.class);
-//                    //Pass lists
-//                    i.putStringArrayListExtra("names", (ArrayList<String>)namesList);
-//                    i.putStringArrayListExtra("links", (ArrayList<String>)linksList);
-//                    i.putStringArrayListExtra("img", (ArrayList<String>)imgList);
-//                    //Start activity
-//                    startActivity(i);
-//                    finish();
 
                 } catch (IOException e) {
                 }
             }
-        }).start();
+        });
+
+        thread.start();
     }
     public List<String> trimSelection(List<String> list){
         Log.v("getFirstFifty", "Trimming Data");
@@ -294,5 +291,13 @@ public class ResultsActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    private void setUpRecyclerView(){
+        this.results_SearchRecyclerView = findViewById(R.id.results_searchRecylcerView);
+        this.myAdapter = new MovieListAdapter(results);
+        this.myManager = new LinearLayoutManager(this);
+        this.results_SearchRecyclerView.setLayoutManager(myManager);
+        this.results_SearchRecyclerView.setAdapter(myAdapter);
     }
 }
