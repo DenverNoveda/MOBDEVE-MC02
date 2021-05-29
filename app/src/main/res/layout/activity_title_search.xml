@@ -94,9 +94,10 @@
                 android:id="@+id/results_FilterConstraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                android:visibility="gone"
                 android:layout_marginTop="10dp"
-                android:background="#393e46">
+                android:background="#393e46"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <Button
                     android:id="@+id/btn_resultsFilterThriller"
@@ -227,13 +228,12 @@
                     app:layout_constraintTop_toTopOf="@+id/btn_resultsFilterAdventure" />
 
                 <Button
-                    android:id="@+id/btn_resultsFilterSuperhero"
+                    android:id="@+id/btn_resultsFilterFamily"
                     android:layout_width="100sp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="29dp"
-                    android:textSize="10sp"
                     android:backgroundTint="#eeeeee"
-                    android:text="Superhero"
+                    android:text="Family"
                     android:textColor="#222831"
                     app:layout_constraintStart_toEndOf="@+id/btn_resultsFilterFantasy"
                     app:layout_constraintTop_toTopOf="@+id/btn_resultsFilterFantasy" />
@@ -244,12 +244,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="16dp"
-                    android:textSize="10sp"
                     android:backgroundTint="#eeeeee"
                     android:text="Animation"
                     android:textColor="#222831"
+                    android:textSize="10sp"
                     app:layout_constraintStart_toStartOf="@id/btn_resultsFilterAdventure"
                     app:layout_constraintTop_toBottomOf="@+id/btn_resultsFilterAdventure" />
+
                 <Button
                     android:id="@+id/btn_resultsFilterRomCom"
                     android:layout_width="100sp"
@@ -257,11 +258,12 @@
                     android:layout_marginStart="29dp"
                     android:layout_marginTop="0dp"
                     android:backgroundTint="#eeeeee"
-                    android:textSize="13sp"
                     android:text="RomCom"
                     android:textColor="#222831"
+                    android:textSize="13sp"
                     app:layout_constraintStart_toEndOf="@+id/btn_resultsFilterAnimation"
                     app:layout_constraintTop_toTopOf="@+id/btn_resultsFilterAnimation" />
+
                 <Button
                     android:id="@+id/btn_resultsFilterActCom"
                     android:layout_width="100sp"
@@ -269,11 +271,11 @@
                     android:layout_marginStart="29dp"
                     android:layout_marginTop="0dp"
                     android:backgroundTint="#eeeeee"
-                    android:textSize="12sp"
                     android:text="Action/Comedy"
                     android:textColor="#222831"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@+id/btn_resultsFilterRomCom"
-                    app:layout_constraintTop_toTopOf="@+id/btn_resultsFilterRomCom"/>
+                    app:layout_constraintTop_toTopOf="@+id/btn_resultsFilterRomCom" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

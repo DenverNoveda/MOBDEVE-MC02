@@ -14,7 +14,6 @@
         <activity android:name=".TitleSearchActivity"></activity>
         <!-- android:theme="@style/Theme.MOBDEVEMC02" -->
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".GenreSearchActivity" />
         <activity android:name=".RecommendMovieActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,29 +22,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class TitleSearchActivity extends AppCompatActivity {
 
     private String address = "";
-    private Context context;
     private int listSize;
     private Elements moviesList, namesListAlpha, linksListAlpha;
     private List<String> namesList, linksList, imgList;
     private List<Document> docList;
     private Document doc;
-    private String[] genres = {};
+    private String[] genreList = {null,null,null,null,null,null,null,null,null,null,null,null,null,null};
+    private String genres;
     private ArrayList<Movie> results;
+
     private Handler mHandler;
 
     private RecyclerView results_SearchRecyclerView;
@@ -67,7 +59,7 @@ public class TitleSearchActivity extends AppCompatActivity {
     private Button btn_resultsFilterSciFi;
     private Button btn_resultsFilterRomCom;
     private Button btn_resultsFilterActCom;
-    private Button btn_resultsFilterSuperhero;
+    private Button btn_resultsFilterFamily;
     private Button btn_resultsFilterMystery;
     private Button btn_resultsFilterDrama;
 
@@ -76,7 +68,7 @@ public class TitleSearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_results);
+        setContentView(R.layout.activity_title_search);
         docList = new ArrayList<>();
         namesList = new ArrayList<>();
         linksList = new ArrayList<>();
@@ -87,10 +79,13 @@ public class TitleSearchActivity extends AppCompatActivity {
         this.et_resultsSearchParam = findViewById(R.id.et_resultsSearchParam);
         this.btn_resultsFilter = findViewById(R.id.btn_resultsFilter);
         this.results_FilterConstraintLayout = findViewById(R.id.results_FilterConstraintLayout);
+        setUpFilterButtons();
         this.btn_searchResults.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                results_FilterConstraintLayout.setVisibility(View.GONE);
                 titleSearch();
+                fillResults();
             }
         });
         this.btn_resultsFilter.setOnClickListener(new View.OnClickListener() {
@@ -110,43 +105,40 @@ public class TitleSearchActivity extends AppCompatActivity {
             Log.d("Name", namesList.get(i));
             Log.d("Link", linksList.get(i));
             movie.setMovieName(namesList.get(i));
-            movie.setImage(imgList.get(i));
+//            movie.setImage(imgList.get(i));
             movie.setLink(linksList.get(i));
             results.add(movie);
         }
     }
     public void titleSearch(){
+        genres = "";
+        filterGenres();
         String query = et_resultsSearchParam.getText().toString();
         query = query.replace(" ", "+");
-        address = "https://m.imdb.com/find?q=" + query + "&s=tt&ttype=ft";
+        address = "https://www.imdb.com/search/title/?title=" + query;
+        if(!genres.isEmpty())
+            address = "https://m.imdb.com/search/title/?title="+ query + "&genres=" + genres;
         if(query.equals("")){
             Toast.makeText(this, "Please enter a query", Toast.LENGTH_LONG).show();
         }else{
             //Start jSoup function
             getDataTitleSearch();
         }
-        }
-    public void genreSearch(View v){
+    }
+    public void filterGenres(){
         //Find and set query data
-        if(isEmptyStringArray(genres)){
-            Toast.makeText(this, "Please select genres", Toast.LENGTH_LONG).show();
-        }else{
-
-            String query = "";
+            genres = "";
             for(int i = 0; i < 14; i++){
-                String test2 = genres[i];
+                String test2 = genreList[i];
                 if(test2!=null){
-                    query = query + genres[i] + ",";
+                    genres = genres + genreList[i] + ",";
                 }
-            }
-            address = "https://www.imdb.com/search/title/?genres=" + query + "&explore=title_type,genres&title_type=movie,tvMovie,tvSeries&ref_=adv_explore_rhs";
-            //Start jSoup function
-            getDataGenreSearch();
+
         }
     }
-    public void getDataGenreSearch(){
-        Toast.makeText(context, "Please wait...", Toast.LENGTH_LONG).show();
-        new Thread(new Runnable() {
+
+    public void getDataTitleSearch(){
+        Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
@@ -157,39 +149,41 @@ public class TitleSearchActivity extends AppCompatActivity {
                     listSize = moviesList.size();
                     //Get names elements
                     namesListAlpha = moviesList.select("img");
+                    imgList = moviesList.eachAttr("src");
                     namesList = namesListAlpha.eachAttr("alt");
-                    //Get first 10 elements;
-                    if(listSize>10){
-                        namesList = trimSelection(namesList);
-                    }
                     //Get links elements
                     linksListAlpha = doc.select("h3.lister-item-header");
                     linksListAlpha = linksListAlpha.select("a");
                     linksList = linksListAlpha.eachAttr("href");
-                    //Get first 10 elements;
-                    if(listSize>10){
+                    //Fix link elements
+                    linksList = fixLinkList(linksList);
+                    //Trim Lists
+                    if(listSize > 10) {
+                        namesList = trimSelection(namesList);
                         linksList = trimSelection(linksList);
                         listSize = 10;
                     }
-                    //Fix link elements
-                    linksList = fixLinkList(linksList);
                     //Get documents for image elements
-                    linksList.stream().forEach(link -> {
-                        try {
-                            Document document1 = Jsoup.connect(link).get();
-                            docList.add(document1);
-                        }catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-//                    Get image elements
-                    for (int i = 0; i<listSize;  i++){
-                        Document doc2 = docList.get(i);
-                        Element poster = doc.selectFirst(".poster");
-                        Element img = poster.selectFirst("img");
-                        String source = img.attr("src");
-                        imgList.add(source);
-                        Log.v("Image List Builder", source);
+//                    linksList.stream().forEach(link -> {
+//                        try {
+//                            Document document1 = Jsoup.connect(link).get();
+//                            docList.add(document1);
+//                        }catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    });
+                    //Get image elements
+//                    for (int i = 0; i < listSize;  i++){
+//                        Document doc2 = docList.get(i);
+//                        Element poster = doc2.selectFirst(".poster");
+//                        Element img = poster.selectFirst("img");
+//                        imgList.add(img.attr("src"));
+//                        Log.v("Image List Builder", img.attr("src"));
+//                    }
+                    if(listSize > 10) {
+                        namesList = trimSelection(namesList);
+                        linksList = trimSelection(linksList);
+                        imgList = trimSelection(imgList);
                     }
                     fillResults();
                     mHandler = new Handler(Looper.getMainLooper());
@@ -200,63 +194,6 @@ public class TitleSearchActivity extends AppCompatActivity {
                         }
                     });
 
-                    Log.v("getData", "Finished ");
-                    Log.v("End", "End of run");
-
-
-
-                } catch (IOException e) {
-                }
-            }
-        }).start();
-    }
-    public void getDataTitleSearch(){
-        Thread thread = new Thread(new Runnable() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void run() {
-                try {
-                    doc = Jsoup.connect(address).get();
-                    moviesList = doc.select("a.subpage:lt(100)");
-                    //Get list size
-                    listSize = moviesList.size();
-                    //Get names elements
-                    namesListAlpha = moviesList.select(".media-body");
-                    namesListAlpha = namesListAlpha.select("span");
-                    namesList = namesListAlpha.eachText();
-                    //Get links elements
-                    linksList = moviesList.eachAttr("href");
-                    //Fix link elements
-                    linksList = fixLinkList(linksList);
-                    //Trim Lists
-                    if(listSize > 10) {
-                        namesList = trimSelection(namesList);
-                        linksList = trimSelection(linksList);
-                        listSize = 10;
-                    }
-                    //Get documents for image elements
-                    linksList.stream().forEach(link -> {
-                        try {
-                            Document document1 = Jsoup.connect(link).get();
-                            docList.add(document1);
-                        }catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    //Get image elements
-                    for (int i = 0; i < listSize;  i++){
-                        Document doc2 = docList.get(i);
-                        Element poster = doc2.selectFirst(".poster");
-                        Element img = poster.selectFirst("img");
-                        imgList.add(img.attr("src"));
-                        Log.v("Image List Builder", img.attr("src"));
-                    }
-                    if(listSize > 10) {
-                        namesList = trimSelection(namesList);
-                        linksList = trimSelection(linksList);
-                        imgList = trimSelection(imgList);
-                    }
-                    
                     Log.v("getData", "Finished");
 
                 } catch (IOException e) {
@@ -293,6 +230,191 @@ public class TitleSearchActivity extends AppCompatActivity {
         return true;
     }
 
+    private void setUpFilterButtons(){
+        this.btn_resultsFilterAction = findViewById(R.id.btn_resultsFilterAction);
+        this.btn_resultsFilterAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[0]==null) {
+                    genreList[0] = "action";
+                }
+                else if(genreList[0].equalsIgnoreCase("action")){
+                    genreList[0] = null;
+                }
+            }
+        });
+
+        this.btn_resultsFilterActCom = findViewById(R.id.btn_resultsFilterActCom);
+        this.btn_resultsFilterActCom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[1]==null) {
+                    genreList[1] = "action,comedy";
+                }
+                else if(genreList[1].equalsIgnoreCase("action,comedy")){
+                    genreList[1] = null;
+                }
+            }
+        });
+
+        this.btn_resultsFilterRomance = findViewById(R.id.btn_resultsFilterRomance);
+        this.btn_resultsFilterRomance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[2]==null) {
+                    genreList[2] = "romance";
+                }
+                else if(genreList[2].equalsIgnoreCase("romance")){
+                    genreList[2] = null;
+                };
+            }
+        });
+        this.btn_resultsFilterDrama = findViewById(R.id.btn_resultsFilterDrama);
+        this.btn_resultsFilterDrama.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[3]==null) {
+                    genreList[3] = "drama";
+                }
+                else if(genreList[3].equalsIgnoreCase("drama")){
+                    genreList[3] = null;
+                }
+            }
+        });
+
+        this.btn_resultsFilterFantasy = findViewById(R.id.btn_resultsFilterFantasy);
+        this.btn_resultsFilterFantasy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[4]==null) {
+                    genreList[4] = "fantasy";
+                }
+                else if(genreList[4].equalsIgnoreCase("fantasy")){
+                    genreList[4] = null;
+                }
+            }
+        });
+        this.btn_resultsFilterFamily = findViewById(R.id.btn_resultsFilterFamily);
+        this.btn_resultsFilterFamily.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[5]==null) {
+                    genreList[5] = "family";
+                }
+                else if(genreList[5].equalsIgnoreCase("family")){
+                    genreList[5] = null;
+                }
+            }
+        });
+        this.btn_resultsFilterCrime = findViewById(R.id.btn_resultsFilterCrime);
+        this.btn_resultsFilterCrime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[6]==null) {
+                    genreList[6] = "crime";
+                }
+                else if(genreList[6].equalsIgnoreCase("crime")){
+                    genreList[6] = null;
+                };
+            }
+        });
+        this.btn_resultsFilterMystery = findViewById(R.id.btn_resultsFilterMystery);
+        this.btn_resultsFilterMystery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[7]==null) {
+                    genreList[7] = "mystery";
+                }
+                else if(genreList[7].equalsIgnoreCase("mystery")){
+                    genreList[7] = null;
+                }
+            }
+        });
+        this.btn_resultsFilterHorror = findViewById(R.id.btn_resultsFilterHorror);
+        this.btn_resultsFilterHorror.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[8]==null) {
+                    genreList[8] = "horror";
+                }
+                else if(genreList[3].equalsIgnoreCase("horror")){
+                    genreList[8] = null;
+                }
+            }
+        });
+        this.btn_resultsFilterComedy = findViewById(R.id.btn_resultsFilterComedy);
+        this.btn_resultsFilterComedy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[9]==null) {
+                    genreList[9] = "comedy";
+                }
+                else if(genreList[9].equalsIgnoreCase("comedy")){
+                    genreList[9] = null;
+                }
+            }
+        });
+        this.btn_resultsFilterThriller = findViewById(R.id.btn_resultsFilterThriller);
+        this.btn_resultsFilterThriller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[10]==null) {
+                    genreList[10] = "thriller";
+                }
+                else if(genreList[10].equalsIgnoreCase("thriller")){
+                    genreList[10] = null;
+                }
+            }
+        });
+        this.btn_resultsFilterRomCom = findViewById(R.id.btn_resultsFilterRomCom);
+        this.btn_resultsFilterRomCom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[11]==null) {
+                    genreList[11] = "romance,comedy";
+                }
+                else if(genreList[11].equalsIgnoreCase("romance,comedy")){
+                    genreList[11] = null;
+                }
+            }
+        });
+        this.btn_resultsFilterSciFi = findViewById(R.id.btn_resultsFilterScifi);
+        this.btn_resultsFilterSciFi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[12]==null) {
+                    genreList[12] = "sci-fi";
+                }
+                else if(genreList[12].equalsIgnoreCase("sci-fo")){
+                    genreList[12] = null;
+                }
+            }
+        });
+        this.btn_resultsFilterAdventure = findViewById(R.id.btn_resultsFilterAdventure);
+        this.btn_resultsFilterAdventure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[13]==null) {
+                    genreList[13] = "adventure";
+                }
+                else if(genreList[13].equalsIgnoreCase("adventure")){
+                    genreList[13] = null;
+                }
+            }
+        });
+        this.btn_resultsFilterAnimation = findViewById(R.id.btn_resultsFilterAnimation);
+        this.btn_resultsFilterAnimation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(genreList[14]==null) {
+                    genreList[14] = "animation";
+                }
+                else if(genreList[14].equalsIgnoreCase("animation")){
+                    genreList[14] = null;
+                }
+            }
+        });
+    }
     private void setUpRecyclerView(){
         this.results_SearchRecyclerView = findViewById(R.id.results_searchRecylcerView);
         this.myAdapter = new MovieListAdapter(results);

@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.api.Distribution;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,9 +30,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private String addressPop = "";
     private String addressComingSoon = "";
-    private Context context;
     private int listSize;
-    private Elements popMoviesListAlpha, popNamesListAlpha, popLinksListAlpha;
+    private Elements popMoviesListAlpha, popNamesListAlpha, popLinksListAlpha, popImgListAlpha;
     private Elements soonMoviesListAlpha, soonNamesListAlpha, soonLinksListAlpha;
     private List<String> popNamesList, popLinksList, popImgList;
     private List<String> soonNamesList, soonLinksList, soonImgList;
@@ -85,7 +86,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void loadMostPopular() {
-        addressPop = "https://www.imdb.com/search/title/?groups=top_100";
+        addressPop = "https://m.imdb.com/search/title/?groups=top_100";
         getDataMostPopular();
     }
 
@@ -98,6 +99,7 @@ public class MainMenuActivity extends AppCompatActivity {
             Movie movie = new Movie();
             Log.d("Name", popNamesList.get(i));
             Log.d("Link", popLinksList.get(i));
+            Log.d("Img", popImgList.get(i));
             movie.setMovieName(popNamesList.get(i));
             movie.setImage(popImgList.get(i));
             movie.setLink(popLinksList.get(i));
@@ -127,6 +129,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     listSize = popMoviesListAlpha.size();
                     //Get names elements
                     popNamesListAlpha = popMoviesListAlpha.select("img");
+                    popImgList = popNamesListAlpha.eachAttr("src");
                     popNamesList = popNamesListAlpha.eachAttr("alt");
                     //Get first 10 elements;
                     if(listSize>10){
@@ -143,27 +146,30 @@ public class MainMenuActivity extends AppCompatActivity {
                     }
                     //Fix link elements
                     popLinksList = fixLinkList(popLinksList);
+
+                    // Get Images
                     //Get documents for image elements
-                    popLinksList.stream().forEach(link -> {
-                        try {
-                            Document document1 = Jsoup.connect(link).get();
-                            docList.add(document1);
-                        }catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    for (int i = 0; i<listSize;  i++){
-                        Document doc2 = docList.get(i);
-                        Element poster = doc2.selectFirst(".poster");
-                        Element img = poster.selectFirst("img");
-                        popImgList.add(img.attr("src"));
-                        Log.v("Image List Builder",img.attr("src") );
-                    }
+//                    popLinksList.stream().forEach(link -> {
+//                        try {
+//                            Document document1 = Jsoup.connect(link).get();
+//                            docList.add(document1);
+//                        }catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    });
+//
+//                    for (int i = 0; i<listSize;  i++){
+//                        Document doc2 = docList.get(i);
+//                        Element poster = doc2.selectFirst(".poster");
+//                        Element img = poster.selectFirst("img");
+//                        popImgList.add(img.attr("src"));
+//                        Log.v("Image List Builder",img.attr("src") );
+//                    }
                     Log.v("End", "End of run");
 
                    fillPopularArray();
                    mHandler = new Handler(Looper.getMainLooper());
-                    mHandler.post(new Runnable() {
+                   mHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             myAdapter1.notifyDataSetChanged();
@@ -211,21 +217,21 @@ public class MainMenuActivity extends AppCompatActivity {
                     //Fix link elements
                     soonLinksList = fixLinkList(soonLinksList);
                     //Get documents for image elements
-                    soonLinksList.stream().forEach(link -> {
-                        try {
-                            Document document1 = Jsoup.connect(link).get();
-                            docList.add(document1);
-                        }catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    for (int i = 0; i<listSize;  i++){
-                        Document doc2 = docList.get(i);
-                        Element poster = doc2.selectFirst(".poster");
-                        Element img = poster.selectFirst("img");
-                        soonImgList.add(img.attr("src"));
-                        Log.v("Image List Builder",img.attr("src") );
-                    }
+//                    soonLinksList.stream().forEach(link -> {
+//                        try {
+//                            Document document1 = Jsoup.connect(link).get();
+//                            docList.add(document1);
+//                        }catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    });
+//                    for (int i = 0; i<listSize;  i++){
+//                        Document doc2 = docList.get(i);
+//                        Element poster = doc2.selectFirst(".poster");
+//                        Element img = poster.selectFirst("img");
+//                        soonImgList.add(img.attr("src"));
+//                        Log.v("Image List Builder",img.attr("src") );
+//                    }
 
                     Log.v("End", "End of run");
 
@@ -282,8 +288,8 @@ public class MainMenuActivity extends AppCompatActivity {
     void setUpPopularRecyclerView(){
         this.popularRecyclerView = findViewById(R.id.popularRecyclerView);
         this.comingSoonRecyclerView = findViewById(R.id.comingSoonRecyclerView);
-        this.myManager1 = new LinearLayoutManager(this);
-        this.myManager2 = new LinearLayoutManager(this);
+        this.myManager1 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        this.myManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         this.popularRecyclerView.setLayoutManager(this.myManager1);
         this.comingSoonRecyclerView.setLayoutManager(this.myManager2);
         this.myAdapter1 = new MovieListAdapter(this.resultsPopular);
