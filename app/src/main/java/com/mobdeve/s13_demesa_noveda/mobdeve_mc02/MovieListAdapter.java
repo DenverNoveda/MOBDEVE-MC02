@@ -1,10 +1,12 @@
 package com.mobdeve.s13_demesa_noveda.mobdeve_mc02;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,11 +25,22 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyVi
     public class MyViewHolder extends RecyclerView.ViewHolder{
         private TextView tv_listItemName;
         private ImageView iv_listItemPoster;
+        private LinearLayout movieListItem_linearLayout;
 
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
             this.iv_listItemPoster = itemView.findViewById(R.id.iv_listItemPoster);
             this.tv_listItemName = itemView.findViewById(R.id.tv_listItemName);
+            this.movieListItem_linearLayout = itemView.findViewById(R.id.movieListItem_LinearLayout);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(v.getContext(), MovieInfoActivity.class);
+                    String movieID = data.get(getAdapterPosition()).getMovieID();
+                    i.putExtra("MOVIE_ID", movieID);
+                    v.getContext().startActivity(i);
+                }
+            });
         }
 
         public void setMovieName(String title){
@@ -37,6 +50,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MyVi
             Picasso.get().load(data.get(position).getImage()).into(iv_listItemPoster);
             iv_listItemPoster.setImageAlpha(255);
         }
+
     }
     @NonNull
     @Override

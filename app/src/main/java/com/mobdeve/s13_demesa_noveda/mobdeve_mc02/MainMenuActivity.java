@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,11 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.api.Distribution;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -31,9 +27,9 @@ public class MainMenuActivity extends AppCompatActivity {
     private String addressPop = "";
     private String addressComingSoon = "";
     private int listSize;
-    private Elements popMoviesListAlpha, popNamesListAlpha, popLinksListAlpha, popImgListAlpha;
+    private Elements popMoviesListAlpha, popNamesListAlpha, popLinksListAlpha;
     private Elements soonMoviesListAlpha, soonNamesListAlpha, soonLinksListAlpha;
-    private List<String> popNamesList, popLinksList, popImgList;
+    private List<String> popNamesList, popLinksList, popImgList, popMovieIDList;
     private List<String> soonNamesList, soonLinksList, soonImgList;
     private List<Document> docList;
     private Document doc;
@@ -79,7 +75,7 @@ public class MainMenuActivity extends AppCompatActivity {
         this.tv_searchByGenre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainMenuActivity.this, TitleSearchActivity.class);
+                Intent i = new Intent(MainMenuActivity.this, ResultsActivity.class);
                 startActivity(i);
             }
         });
@@ -103,6 +99,7 @@ public class MainMenuActivity extends AppCompatActivity {
             movie.setMovieName(popNamesList.get(i));
             movie.setImage(popImgList.get(i));
             movie.setLink(popLinksList.get(i));
+            movie.setMovieID(popMovieIDList.get(i));
             resultsPopular.add(movie);
         }
     }
@@ -114,6 +111,7 @@ public class MainMenuActivity extends AppCompatActivity {
             movie.setMovieName(soonNamesList.get(i));
             movie.setImage(soonImgList.get(i));
             movie.setLink(soonLinksList.get(i));
+
             resultsComingSoon.add(movie);
         }
     }
@@ -145,6 +143,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         listSize = 10;
                     }
                     //Fix link elements
+                    popMovieIDList = getMovieID(popLinksList);
                     popLinksList = fixLinkList(popLinksList);
 
                     // Get Images
@@ -185,7 +184,6 @@ public class MainMenuActivity extends AppCompatActivity {
         });
         thread.start();
     }
-
 
 
     private void getDataComingSoon(){
@@ -268,6 +266,7 @@ public class MainMenuActivity extends AppCompatActivity {
         return listFinal;
     }
 
+
     public List<String> fixLinkList(List<String> list){
         List<String> fixedLinkList = new ArrayList<>();
         for(int i = 0; i < list.size(); i++){
@@ -276,13 +275,18 @@ public class MainMenuActivity extends AppCompatActivity {
         }
         return fixedLinkList;
     }
-    public boolean isEmptyStringArray(String [] array){
-        for(int i=0; i<array.length; i++){
-            if(array[i]!=null){
-                return false;
+    private List<String> getMovieID(List<String> list){
+        List<String> movieIDList = new ArrayList<>();
+        String temp;
+        for(int i = 0; i < list.size(); i++){
+            temp = "";
+            for(int j = 7; j <=15; j++){
+                temp = temp + list.get(i).charAt(j);
             }
+            movieIDList.add(temp);
+            Log.d("MOVIEID", temp);
         }
-        return true;
+        return movieIDList;
     }
 
     void setUpPopularRecyclerView(){

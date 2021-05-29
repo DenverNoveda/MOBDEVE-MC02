@@ -6,7 +6,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,14 +18,13 @@ import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TitleSearchActivity extends AppCompatActivity {
+public class ResultsActivity extends AppCompatActivity {
 
     private String address = "";
     private int listSize;
@@ -68,7 +66,7 @@ public class TitleSearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_title_search);
+        setContentView(R.layout.activity_results);
         docList = new ArrayList<>();
         namesList = new ArrayList<>();
         linksList = new ArrayList<>();
