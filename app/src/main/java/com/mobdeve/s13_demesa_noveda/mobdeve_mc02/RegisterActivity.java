@@ -19,9 +19,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     // Firebase variables
     private FirebaseAuth auth;
     private FirebaseFirestore database;
+
 
     // Front end variables
     private TextView et_registerUsername, et_registerPass, et_registerPassConfirm, et_registerEmail;
@@ -117,16 +122,27 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // (1) Create new user with the info inputted (by the user)
+                                SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
+                                String timeDate = sdf.format(new Date());
+
                                 Map<String, Object> user = new HashMap<>();
                                 user.put("username", username);
                                 user.put("password", pass);
                                 user.put("email", email);
+                                user.put("accDateCreation", timeDate);
 
                                  // (2) add new user as a new document (in "users" collection) with generated ID
                                 database.collection("users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                     @Override
                                     public void onSuccess(DocumentReference documentReference) {
-                                        Log.d("Add Document Success:", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                        Log.v("ZED", "DocumentSnapshot added with ID: " + documentReference.getId());
+
+                                        FirebaseUser user = auth.getCurrentUser();
+                                        Log.v("ZED", "getCurrentUser(): " + auth.getCurrentUser().getUid());
+                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(username).build();
+                                        user.updateProfile(profileUpdates);
+
+
                                     }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
