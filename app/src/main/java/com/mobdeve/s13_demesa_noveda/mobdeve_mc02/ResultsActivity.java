@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,7 +33,7 @@ public class ResultsActivity extends AppCompatActivity {
     private List<String> namesList, linksList, imgList;
     private List<Document> docList;
     private Document doc;
-    private String[] genreList = {null,null,null,null,null,null,null,null,null,null,null,null,null,null};
+    private String[] genreList = {null,null,null,null,null,null,null,null,null,null,null,null};
     private String genres;
     private ArrayList<Movie> results;
 
@@ -55,8 +56,6 @@ public class ResultsActivity extends AppCompatActivity {
     private Button btn_resultsFilterAdventure;
     private Button btn_resultsFilterAnimation;
     private Button btn_resultsFilterSciFi;
-    private Button btn_resultsFilterRomCom;
-    private Button btn_resultsFilterActCom;
     private Button btn_resultsFilterFamily;
     private Button btn_resultsFilterMystery;
     private Button btn_resultsFilterDrama;
@@ -235,22 +234,13 @@ public class ResultsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(genreList[0]==null) {
                     genreList[0] = "action";
+                    btn_resultsFilterAction.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterAction.setBackgroundColor(Color.parseColor("#393e46"));
                 }
                 else if(genreList[0].equalsIgnoreCase("action")){
                     genreList[0] = null;
-                }
-            }
-        });
-
-        this.btn_resultsFilterActCom = findViewById(R.id.btn_resultsFilterActCom);
-        this.btn_resultsFilterActCom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(genreList[1]==null) {
-                    genreList[1] = "action,comedy";
-                }
-                else if(genreList[1].equalsIgnoreCase("action,comedy")){
-                    genreList[1] = null;
+                    btn_resultsFilterAction.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterAction.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
@@ -259,23 +249,31 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterRomance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[2]==null) {
-                    genreList[2] = "romance";
+                if(genreList[1]==null) {
+                    genreList[1] = "romance";
+                    btn_resultsFilterRomance.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterRomance.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[2].equalsIgnoreCase("romance")){
-                    genreList[2] = null;
-                };
+                else if(genreList[1].equalsIgnoreCase("romance")){
+                    genreList[1] = null;
+                    btn_resultsFilterRomance.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterRomance.setBackgroundColor(Color.parseColor("#EEEEEE"));
+                }
             }
         });
         this.btn_resultsFilterDrama = findViewById(R.id.btn_resultsFilterDrama);
         this.btn_resultsFilterDrama.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[3]==null) {
-                    genreList[3] = "drama";
+                if(genreList[2]==null) {
+                    genreList[2] = "drama";
+                    btn_resultsFilterDrama.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterDrama.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[3].equalsIgnoreCase("drama")){
-                    genreList[3] = null;
+                else if(genreList[2].equalsIgnoreCase("drama")){
+                    genreList[2] = null;
+                    btn_resultsFilterDrama.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterDrama.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
@@ -284,11 +282,15 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterFantasy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[4]==null) {
-                    genreList[4] = "fantasy";
+                if(genreList[3]==null) {
+                    genreList[3] = "fantasy";
+                    btn_resultsFilterDrama.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterDrama.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[4].equalsIgnoreCase("fantasy")){
-                    genreList[4] = null;
+                else if(genreList[3].equalsIgnoreCase("fantasy")){
+                    genreList[3] = null;
+                    btn_resultsFilterRomance.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterRomance.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
@@ -296,11 +298,15 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterFamily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[5]==null) {
-                    genreList[5] = "family";
+                if(genreList[4]==null) {
+                    genreList[4] = "family";
+                    btn_resultsFilterFamily.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterFamily.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[5].equalsIgnoreCase("family")){
-                    genreList[5] = null;
+                else if(genreList[4].equalsIgnoreCase("family")){
+                    genreList[4] = null;
+                    btn_resultsFilterFamily.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterFamily.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
@@ -308,11 +314,15 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterCrime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[6]==null) {
-                    genreList[6] = "crime";
+                if(genreList[5]==null) {
+                    genreList[5] = "crime";
+                    btn_resultsFilterCrime.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterCrime.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[6].equalsIgnoreCase("crime")){
-                    genreList[6] = null;
+                else if(genreList[5].equalsIgnoreCase("crime")){
+                    genreList[5] = null;
+                    btn_resultsFilterCrime.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterCrime.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 };
             }
         });
@@ -320,11 +330,15 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterMystery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[7]==null) {
-                    genreList[7] = "mystery";
+                if(genreList[6]==null) {
+                    genreList[6] = "mystery";
+                    btn_resultsFilterMystery.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterMystery.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[7].equalsIgnoreCase("mystery")){
-                    genreList[7] = null;
+                else if(genreList[6].equalsIgnoreCase("mystery")){
+                    genreList[6] = null;
+                    btn_resultsFilterMystery.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterMystery.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
@@ -332,11 +346,15 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterHorror.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[8]==null) {
-                    genreList[8] = "horror";
+                if(genreList[7]==null) {
+                    genreList[7] = "horror";
+                    btn_resultsFilterHorror.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterHorror.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[3].equalsIgnoreCase("horror")){
-                    genreList[8] = null;
+                else if(genreList[7].equalsIgnoreCase("horror")){
+                    genreList[7] = null;
+                    btn_resultsFilterHorror.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterHorror.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
@@ -344,11 +362,15 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterComedy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[9]==null) {
-                    genreList[9] = "comedy";
+                if(genreList[8]==null) {
+                    genreList[8] = "comedy";
+                    btn_resultsFilterComedy.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterComedy.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[9].equalsIgnoreCase("comedy")){
-                    genreList[9] = null;
+                else if(genreList[8].equalsIgnoreCase("comedy")){
+                    genreList[8] = null;
+                    btn_resultsFilterComedy.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterComedy.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
@@ -356,23 +378,15 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterThriller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[10]==null) {
-                    genreList[10] = "thriller";
+                if(genreList[9]==null) {
+                    genreList[9] = "thriller";
+                    btn_resultsFilterThriller.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterThriller.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[10].equalsIgnoreCase("thriller")){
-                    genreList[10] = null;
-                }
-            }
-        });
-        this.btn_resultsFilterRomCom = findViewById(R.id.btn_resultsFilterRomCom);
-        this.btn_resultsFilterRomCom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(genreList[11]==null) {
-                    genreList[11] = "romance,comedy";
-                }
-                else if(genreList[11].equalsIgnoreCase("romance,comedy")){
-                    genreList[11] = null;
+                else if(genreList[9].equalsIgnoreCase("thriller")){
+                    genreList[9] = null;
+                    btn_resultsFilterThriller.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterThriller.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
@@ -380,11 +394,15 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterSciFi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[12]==null) {
-                    genreList[12] = "sci-fi";
+                if(genreList[10]==null) {
+                    genreList[10] = "sci-fi";
+                    btn_resultsFilterSciFi.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterSciFi.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[12].equalsIgnoreCase("sci-fo")){
-                    genreList[12] = null;
+                else if(genreList[10].equalsIgnoreCase("sci-fo")){
+                    genreList[10] = null;
+                    btn_resultsFilterSciFi.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterSciFi.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
@@ -392,11 +410,15 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterAdventure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[13]==null) {
-                    genreList[13] = "adventure";
+                if(genreList[11]==null) {
+                    genreList[11] = "adventure";
+                    btn_resultsFilterAdventure.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterAdventure.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[13].equalsIgnoreCase("adventure")){
-                    genreList[13] = null;
+                else if(genreList[11].equalsIgnoreCase("adventure")){
+                    genreList[11] = null;
+                    btn_resultsFilterAdventure.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterAdventure.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
@@ -404,11 +426,15 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_resultsFilterAnimation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(genreList[14]==null) {
-                    genreList[14] = "animation";
+                if(genreList[12]==null) {
+                    genreList[12] = "animation";
+                    btn_resultsFilterAnimation.setTextColor(Color.parseColor("#EEEEEE"));
+                    btn_resultsFilterAnimation.setBackgroundColor(Color.parseColor("#393e46"));
                 }
-                else if(genreList[14].equalsIgnoreCase("animation")){
-                    genreList[14] = null;
+                else if(genreList[12].equalsIgnoreCase("animation")){
+                    genreList[12] = null;
+                    btn_resultsFilterAnimation.setTextColor(Color.parseColor("#393e46"));
+                    btn_resultsFilterAnimation.setBackgroundColor(Color.parseColor("#EEEEEE"));
                 }
             }
         });
