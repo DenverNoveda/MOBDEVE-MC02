@@ -177,8 +177,9 @@ public class MovieInfoActivity extends AppCompatActivity {
                                 String recommendationText = document.get("recommendationText").toString();  Log.v("getRecommendations(): ","String recommendationText: " + recommendationText);
                                 String date = document.get("date").toString();  Log.v("getRecommendations(): ","String date: " + date);
                                 String username = document.get("username").toString();  Log.v("getRecommendations(): ","String username: " + username);
-
-                                Recommend recommend = new Recommend(movie, recommendationText, date, username);
+                                long likes = (long) document.get("likes");
+                                long dislikes = (long) document.get("dislikes");
+                                Recommend recommend = new Recommend(movie, recommendationText, date, username, likes, dislikes);
                                 recommends.add(recommend);
                                 Log.d("getRecommendations(): ", "From getRecommendations(): " + recommends.toString());
 

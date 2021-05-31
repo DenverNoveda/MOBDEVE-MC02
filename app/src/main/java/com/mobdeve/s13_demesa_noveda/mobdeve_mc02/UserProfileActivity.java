@@ -102,8 +102,9 @@ public class UserProfileActivity extends AppCompatActivity {
                                 String movie = document.get("movie").toString();  Log.v("UserProfileActivity","String movie: " + movie);
                                 String recommendationText = document.get("recommendationText").toString();  Log.v("UserProfileActivity","String recommendationText: " + recommendationText);
                                 String date = document.get("date").toString();  Log.v("UserProfileActivity","String date: " + date);
-
-                                Recommend recommend = new Recommend(movie, recommendationText, date, username);
+                                long likes = (long) document.get("likes");
+                                long dislikes = (long) document.get("dislikes");
+                                Recommend recommend = new Recommend(movie, recommendationText, date, username, likes, dislikes);
                                 recommends.add(recommend);
                                 Log.d("UserProfileActivity", "From setUserProfileData(): (Part 2) " + recommends.toString());
 

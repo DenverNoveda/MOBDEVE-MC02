@@ -19,7 +19,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,12 +65,17 @@ public class RecommendMovieActivity extends AppCompatActivity {
         String selectedMovie = tv_selectedMovie.getText().toString();
         String recommendation = et_userRecommend.getText().toString();
         String timeDate = sdf.format(new Date());
-
+        ArrayList<String> numLikers = new ArrayList<>();
+        ArrayList<String> numDislikers = new ArrayList<>();
         Map<String, Object> user = new HashMap<>();
         user.put("username", username);
         user.put("movie", selectedMovie);
+        user.put("likes", 0);
+        user.put("dislikes", 0);
         user.put("recommendationText", recommendation);
         user.put("date", timeDate);
+        user.put("userLikers", numLikers);
+        user.put("userDislikers", numDislikers);
 
         database.collection("recommendations").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override

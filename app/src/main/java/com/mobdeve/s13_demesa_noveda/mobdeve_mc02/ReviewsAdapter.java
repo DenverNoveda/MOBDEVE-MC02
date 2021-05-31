@@ -80,22 +80,21 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MyViewHo
         holder.setButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("ReviewsAdapter", "LikeFunction():Triggered");
+                Log.d("ReviewAdapter", "LikeFunction():Triggered");
                 if (v.getId() == R.id.iv_reviewLike) {
                     // like review
                     addLike(position);
-
-
+                    notifyDataSetChanged();
                 }
 
                 if (v.getId() == R.id.iv_reviewDislike) {
                     // dislike review
-
+                    addDislike(position);
+                    notifyDataSetChanged();
                 }
             }
         });
     }
-
     public void addLike(int position) {
         database.collection("reviews").whereEqualTo("username", reviews.get(position).getReviewAuthor()).whereEqualTo("reviewText", reviews.get(position).getReviewContent()).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -105,12 +104,115 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MyViewHo
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 QueryDocumentSnapshot doc = document;
                                 long l = (long) doc.get("likes");
-                                int newVal = (int) l + 1;
-                                document.getReference().update("likes", newVal);
-                                Log.d("ReviewsAdapter", "LikeFunction(): +1 Like!: ");
+                                long d = (long) doc.get("dislikes");
+                                boolean isLiked = false;
+                                boolean isDisliked = false;
+
+                                ArrayList<String> dislikers = (ArrayList<String>) doc.get("userDislikers");
+                                for(int i = 0; i < dislikers.size(); i++){
+                                    if(dislikers.get(i).equalsIgnoreCase(user)){
+                                        isDisliked = true;
+                                        dislikers.remove(i);
+                                    }
+
+                                }
+                                ArrayList<String> likers = (ArrayList<String>) doc.get("userLikers");
+                                for(int i = 0; i < likers.size(); i++){
+                                    if(likers.get(i).equalsIgnoreCase(user)){
+                                        isLiked = true;
+                                        likers.remove(i);
+                                    }
+                                }
+
+                                if(!isLiked){
+                                    if(!isDisliked){
+                                        int likeVal = (int) l + 1;
+                                        likers.add(user);
+                                        reviews.get(position).setLikes(likeVal);
+                                        document.getReference().update("likes", likeVal);
+                                        document.getReference().update("userLikers", likers);
+                                        notifyDataSetChanged();
+                                    }else{
+                                        int likeVal = (int) l + 1;
+                                        int dislikeVal = (int) d - 1;
+                                        likers.add(user);
+                                        reviews.get(position).setLikes(likeVal);
+                                        reviews.get(position).setDislikes(dislikeVal);
+                                        document.getReference().update("likes", likeVal);
+                                        document.getReference().update("dislikes", dislikeVal);
+                                        document.getReference().update("userLikers", likers);
+                                        document.getReference().update("userDislikers", dislikers);
+                                    }
+                                }else{
+                                    int likeVal = (int) l - 1;
+                                    reviews.get(position).setLikes(likeVal);
+                                    document.getReference().update("likes", likeVal);
+                                    document.getReference().update("userLikers", likers);
+                                }
+                                Log.d("RecommendAdapter", "LikeFunction(): +1 Like!: ");
                             }
                         } else {
-                            Log.d("ReviewsAdapter", "LikeFunction(): Error getting documents: ", task.getException());
+                            Log.d("RecommendAdapter", "LikeFunction(): Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+    public void addDislike(int position){
+        database.collection("reviews").whereEqualTo("username", reviews.get(position).getReviewAuthor()).whereEqualTo("reviewText", reviews.get(position).getReviewContent()).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                QueryDocumentSnapshot doc = document;
+                                long l = (long) doc.get("likes");
+                                long d = (long) doc.get("dislikes");
+                                boolean isLiked = false;
+                                boolean isDisliked = false;
+
+                                ArrayList<String> dislikers = (ArrayList<String>) doc.get("userDislikers");
+                                for(int i = 0; i < dislikers.size(); i++){
+                                    if(dislikers.get(i).equalsIgnoreCase(user)){
+                                        isDisliked = true;
+                                        dislikers.remove(i);
+                                    }
+                                }
+                                ArrayList<String> likers = (ArrayList<String>) doc.get("userLikers");
+                                for(int i = 0; i < likers.size(); i++){
+                                    if(likers.get(i).equalsIgnoreCase(user)){
+                                        isLiked = true;
+                                        likers.remove(i);
+                                    }
+                                }
+
+                                if(!isDisliked){
+                                    if(!isLiked){
+                                        int dislikeVal = (int) d + 1;
+                                        dislikers.add(user);
+                                        reviews.get(position).setDislikes(dislikeVal);
+                                        document.getReference().update("dislikes", dislikeVal);
+                                        document.getReference().update("userDislikers", dislikers);
+                                    }else{
+                                        int dislikeVal = (int) d + 1;
+                                        int likeVal = (int) l - 1;
+                                        dislikers.add(user);
+                                        reviews.get(position).setLikes(likeVal);
+                                        reviews.get(position).setDislikes(dislikeVal);
+                                        document.getReference().update("likes", likeVal);
+                                        document.getReference().update("dislikes", dislikeVal);
+                                        document.getReference().update("userLikers", likers);
+                                        document.getReference().update("userDislikers", dislikers);
+                                    }
+                                }else{
+                                    int dislikeVal = (int) d - 1;
+                                    reviews.get(position).setDislikes(dislikeVal);
+                                    document.getReference().update("dislikes", dislikeVal);
+                                    document.getReference().update("userDislikers", dislikers);
+                                }
+                                Log.d("RecommendAdapter", "DislikeFunction(): +1 Like!: ");
+                            }
+                        } else {
+                            Log.d("RecommendAdapter", "DislikeFunction(): Error getting documents: ", task.getException());
                         }
                     }
                 });

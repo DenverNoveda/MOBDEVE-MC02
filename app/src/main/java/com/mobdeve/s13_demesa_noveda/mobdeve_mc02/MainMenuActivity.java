@@ -35,7 +35,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private List<String> popNamesList, popLinksList, popImgList, popMovieIDList;
     private List<String> popShowsNamesList, popShowsLinksList, popShowsImgList, popShowsIDList;
     private List<String> soonNamesList, soonLinksList, soonImgList,soonMovieIDList;
-    private Document doc;
+    private Document doc1, doc2;
     private ArrayList<Movie> resultsPopMovies;
     private ArrayList<Movie> resultsComingSoon;
     private ArrayList<Movie> resultsPopShows;
@@ -191,8 +191,8 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    doc = Jsoup.connect(addressPopMovies).get();
-                    popMoviesListAlpha = doc.select("td.posterColumn");
+                    doc1 = Jsoup.connect(addressPopMovies).get();
+                    popMoviesListAlpha = doc1.select("td.posterColumn");
                     //Get list size
                     popShowsListSize = popMoviesListAlpha.size();
                     //Get names elements
@@ -204,7 +204,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         popNamesList = trimSelection(popNamesList);
                     }
                     //Get links elements
-                    popLinksListAlpha = doc.select("td.posterColumn");
+                    popLinksListAlpha = doc1.select("td.posterColumn");
                     popLinksListAlpha = popLinksListAlpha.select("a");
                     popLinksList = popLinksListAlpha.eachAttr("href");
                     //Get first 10 elements;
@@ -242,8 +242,8 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    doc = Jsoup.connect(addressPopShows).get();
-                    popShowsListAlpha = doc.select("td.posterColumn");
+                    doc2 = Jsoup.connect(addressPopShows).get();
+                    popShowsListAlpha = doc2.select("td.posterColumn");
                     //Get list size
                     popShowsListSize = popShowsListAlpha.size();
                     //Get names elements
@@ -255,7 +255,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         popShowsNamesList = trimSelection(popShowsNamesList);
                     }
                     //Get links elements
-                    popShowsLinksListAlpha = doc.select("td.posterColumn");
+                    popShowsLinksListAlpha = doc2.select("td.posterColumn");
                     popShowsLinksListAlpha = popShowsLinksListAlpha.select("a");
                     popShowsLinksList = popShowsLinksListAlpha.eachAttr("href");
                     //Get first 10 elements;
@@ -293,8 +293,8 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    doc = Jsoup.connect(addressComingSoon).get();
-                    soonMoviesListAlpha = doc.select("div.image");
+                    doc1 = Jsoup.connect(addressComingSoon).get();
+                    soonMoviesListAlpha = doc1.select("div.image");
                     //Get list size
                     soonListSize = soonMoviesListAlpha.size();
                     //Get names elements
@@ -306,7 +306,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         soonNamesList = trimSelection(soonNamesList);
                     }
                     //Get links elements
-                    soonLinksListAlpha = doc.select("div.image");
+                    soonLinksListAlpha = doc1.select("div.image");
                     soonLinksListAlpha = soonLinksListAlpha.select("a");
                     soonLinksList = soonLinksListAlpha.eachAttr("href");
                     //Get first 10 elements;

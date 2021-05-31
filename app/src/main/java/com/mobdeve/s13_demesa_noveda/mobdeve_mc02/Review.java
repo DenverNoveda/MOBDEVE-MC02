@@ -8,10 +8,10 @@ public class Review implements Serializable {
     private String reviewPublished;
     private String reviewAuthor;
     private String rating;
-    private int likes;
-    private int dislikes;
+    private long likes;
+    private long dislikes;
 
-    public Review(String reviewMovieName, String reviewContent, String reviewPublished, String reviewAuthor, String rating, int likes, int dislikes) {
+    public Review(String reviewMovieName, String reviewContent, String reviewPublished, String reviewAuthor, String rating, long likes, long dislikes) {
         this.reviewMovieName = reviewMovieName;
         this.reviewContent = reviewContent;
         this.reviewPublished = reviewPublished;
@@ -27,6 +27,14 @@ public class Review implements Serializable {
         this.reviewPublished = reviewPublished;
         this.reviewAuthor = reviewAuthor;
         this.rating = rating;
+    }
+
+    public void setLikes(long likes) {
+        this.likes = likes;
+    }
+
+    public void setDislikes(long dislikes) {
+        this.dislikes = dislikes;
     }
 
     public String getReviewMovieName() {
@@ -49,11 +57,11 @@ public class Review implements Serializable {
         return rating;
     }
 
-    public int getLikes() {
+    public long getLikes() {
         return likes;
     }
 
-    public int getDislikes() {
+    public long getDislikes() {
         return dislikes;
     }
 }
