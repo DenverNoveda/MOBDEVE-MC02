@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_selectedMovie"
+        android:id="@+id/tv_selectedMovie2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="157dp"
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <ImageView
-        android:id="@+id/iv_moviePhoto"
+        android:id="@+id/iv_moviePhoto2"
         android:layout_width="150dp"
         android:layout_height="225dp"
         android:layout_marginStart="131dp"
@@ -46,7 +46,7 @@
         android:layout_marginEnd="131dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_selectedMovie"
+        app:layout_constraintTop_toBottomOf="@+id/tv_selectedMovie2"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -61,7 +61,7 @@
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_moviePhoto" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_moviePhoto2" />
 
     <EditText
         android:id="@+id/et_userReview"
@@ -71,8 +71,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="37dp"
         android:fontFamily="sans-serif-condensed-light"
+        android:hint="What movie do you recommend?"
         android:inputType="textMultiLine"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui purus, eleifend vitae nisl et, dapibus accumsan augue. Phasellus ut mollis sem, sit amet vulputate purus. Vivamus rutrum commodo nisi, quis varius turpis euismod quis. Nullam ut vulputate dolor. In hac habitasse platea dictumst. Proin convallis blandit tristique. Duis tincidunt, mi nec ultricies condimentum, lorem est pulvinar libero, a egestas orci orci ac metus."
         android:textColor="#BCBCBC"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,6 +87,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="107dp"
         android:backgroundTint="#393e46"
+        android:onClick="sendRecommendation"
         android:text="Send Recommendation"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"

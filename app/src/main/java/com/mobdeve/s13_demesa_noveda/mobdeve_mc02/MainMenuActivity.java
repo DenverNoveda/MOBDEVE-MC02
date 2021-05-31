@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -53,6 +55,8 @@ public class MainMenuActivity extends AppCompatActivity {
     private TextView tv_seeMoreComingSoon;
     private TextView tv_searchByGenre;
 
+    private ImageView iv_goToProfile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,8 @@ public class MainMenuActivity extends AppCompatActivity {
         this.tv_seeMorePopular = findViewById(R.id.tv_seeMorePopMovies);
         this.tv_seeMoreComingSoon = findViewById(R.id.tv_seeMoreComingSoonMovies);
         this.tv_searchByGenre = findViewById(R.id.tv_searchByGenre);
+        this.iv_goToProfile = findViewById(R.id.iv_goToProfile);
+
         Log.d("SETUP", "OnCreate Done");
 
 
@@ -83,6 +89,15 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainMenuActivity.this, ResultsActivity.class);
+                startActivity(i);
+
+            }
+        });
+
+        this.iv_goToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainMenuActivity.this, UserProfileActivity.class);
                 startActivity(i);
             }
         });
@@ -212,7 +227,6 @@ public class MainMenuActivity extends AppCompatActivity {
         thread.start();
     }
 
-
     private void getDataComingSoon(){
         Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -295,7 +309,6 @@ public class MainMenuActivity extends AppCompatActivity {
         Log.v("getFirstFifty", "Finished trimming Data");
         return listFinal;
     }
-
 
     public List<String> fixLinkList(List<String> list){
         List<String> fixedLinkList = new ArrayList<>();

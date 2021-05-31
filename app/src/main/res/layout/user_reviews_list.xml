@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_movie_date2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Movie Title | January 1, 2021" />
+
+    <TextView
+        android:id="@+id/tv_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="1.0 / 5" />
+
+    <TextView
+        android:id="@+id/tv_userReview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:text="not so long text" />
+
+</LinearLayout>
