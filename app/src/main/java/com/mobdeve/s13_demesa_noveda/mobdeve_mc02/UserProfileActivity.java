@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +35,9 @@ public class UserProfileActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
 
     // Front end variables
-    private TextView tv_username, tv_userAccDate, tv_userBio, tv_logout;
+    private TextView tv_username, tv_userAccDate, tv_logout;
+    private EditText et_bio;
+    private Button btn_updateBio;
     private RecyclerView favoritesRecyclerView, userReviewsRecyclerView, userRecommendationsRecyclerView;
 
     // others
@@ -52,8 +56,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
         tv_username = findViewById(R.id.tv_username);
         tv_userAccDate = findViewById(R.id.tv_userAccDate);
-        tv_userBio = findViewById(R.id.tv_userBio);
+        et_bio = findViewById(R.id.et_bio);
         tv_logout = findViewById(R.id.tv_logout);
+        btn_updateBio = findViewById(R.id.btn_updateBio);
         favoritesRecyclerView = findViewById(R.id.favoritesRecyclerView);
         userReviewsRecyclerView = findViewById(R.id.userReviewsRecyclerView);
         userRecommendationsRecyclerView = findViewById(R.id.userRecommendationsRecyclerView);
@@ -75,7 +80,10 @@ public class UserProfileActivity extends AppCompatActivity {
                             QuerySnapshot document = task.getResult();
                             tv_username.setText(document.getDocuments().get(0).get("username").toString());
                             tv_userAccDate.setText(document.getDocuments().get(0).get("accCreationDate").toString());
-                            tv_userBio.setText(document.getDocuments().get(0).get("bio").toString());
+                            if (!(document.getDocuments().get(0).get("bio") == null))
+                                et_bio.setText(document.getDocuments().get(0).get("bio").toString());
+                            else
+                                et_bio.setText(" ");
                         } else {
                             Log.d("UserProfileActivity", "Error getting documents: ", task.getException());
                         }
@@ -140,7 +148,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 });
 
         // (4) set user's favorites
-        /*database.collection("favorites").whereEqualTo("username", username).orderBy("movie", Query.Direction.ASCENDING)
+        database.collection("favorites").whereEqualTo("username", username).orderBy("movie", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -150,7 +158,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                                 String movie = document.get("movie").toString();
 
-                                Favorite favorite = new Favorite(movie, username);
+                                Favorite favorite = new Favorite(username, movie);
                                 favorites.add(favorite);
                                 Log.d("UserProfileActivity", "From setUserProfileData(): (Part 4) " + favorites.toString());
 
@@ -163,8 +171,37 @@ public class UserProfileActivity extends AppCompatActivity {
                             Log.v("UserProfileActivity", "Error getting documents: ", task.getException());
                         }
                     }
-                });    */
+                });
 
+    }
+
+    // Triggered By: Pressing the "Edit Bio" button | edits the bio in activity and database
+    public void updateBio(View v) {
+        String username = currentUser.getDisplayName();
+
+        database.collection("users").whereEqualTo("username", username).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                document.getReference().update("bio", et_bio.getText().toString());
+                                et_bio.setFocusable(false);
+                            }
+                        } else {
+                            Log.d("UserProfileActivity", "updateBio(): Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    // Triggered By: Pressing the Logout TextView | Logs out the user and moves them to the registration activity.
+    public void logout(View v) {
+        mAuth.signOut();
+        Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 
     // sets up userRecommendationsAdapter
@@ -190,7 +227,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     // sets up userReviewsAdapter
-    /*public void setUserFavoritesAdapter() {
+    public void setUserFavoritesAdapter() {
         Log.d("UserProfileActivity", "Invoked: setUserFavoritesAdapter()");
         Log.d("UserProfileActivity", "From setUserFavoritesAdapter(): " + reviews.toString());
         UserFavoritesAdapter userFavAdapter = new UserFavoritesAdapter(favorites);
@@ -198,14 +235,5 @@ public class UserProfileActivity extends AppCompatActivity {
         favoritesRecyclerView.setLayoutManager(userFavoritesLayoutManager);
         favoritesRecyclerView.setItemAnimator(new DefaultItemAnimator());
         favoritesRecyclerView.setAdapter(userFavAdapter);
-    }*/
-
-    // Triggered By: Pressing the Logout TextView | Logs out the user and moves them to the registration activity.
-    public void logout(View v) {
-        mAuth.signOut();
-        Toast.makeText(this, "Successfully logged out.", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
-        finish();
     }
 }

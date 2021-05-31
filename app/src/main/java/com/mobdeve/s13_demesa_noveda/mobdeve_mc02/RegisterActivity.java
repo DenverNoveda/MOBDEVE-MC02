@@ -129,7 +129,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 user.put("username", username);
                                 user.put("password", pass);
                                 user.put("email", email);
-                                user.put("accDateCreation", timeDate);
+                                user.put("accCreationDate", timeDate);
+                                user.put("bio", " ");
 
                                  // (2) add new user as a new document (in "users" collection) with generated ID
                                 database.collection("users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
