@@ -71,6 +71,8 @@ public class WriteReviewActivity extends AppCompatActivity {
         user.put("reviewText", review);
         user.put("date", timeDate);
         user.put("rating", reviewScore);
+        user.put("likes", 0);
+        user.put("dislikes", 0);
 
         database.collection("reviews").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -25,6 +27,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5sp"
+        android:layout_marginBottom="5sp"
         android:fontFamily="sans-serif-condensed-light"
         android:text="The quick brown fox jumps over the lazy dog. Sphinx of black quartz, judge my vow. The five boxing wizards jump quickly." />
+
+    <LinearLayout
+        android:layout_width="150sp"
+        android:layout_height="30sp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_reviewLike"
+            android:layout_width="15sp"
+            android:layout_height="20sp"
+            android:layout_weight="1"
+            tools:srcCompat="@drawable/like" />
+
+        <TextView
+            android:id="@+id/tv_reviewLikeNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="-" />
+
+        <ImageView
+            android:id="@+id/iv_reviewDislike"
+            android:layout_width="15sp"
+            android:layout_height="20sp"
+            android:layout_marginTop="1sp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/dislike" />
+
+        <TextView
+            android:id="@+id/tv_reviewDislikeNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="-" />
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -211,7 +211,12 @@ public class MovieInfoActivity extends AppCompatActivity {
                                 String username = document.get("username").toString();  Log.v("getReviews(): ","String username: " + username);
                                 String rating = document.get("rating").toString();
 
-                                Review review = new Review(movie, reviewText, date, username, rating);
+                                long longLikes = (long) document.get("likes");
+                                long longDislikes = (long) document.get("dislikes");
+                                int likes = (int) longLikes;
+                                int dislikes = (int) longDislikes;
+
+                                Review review = new Review(movie, reviewText, date, username, rating, likes, dislikes);
                                 reviews.add(review);
                                 Log.d("getReviews(): ", "From getReviews(): " + reviews.toString());
 
