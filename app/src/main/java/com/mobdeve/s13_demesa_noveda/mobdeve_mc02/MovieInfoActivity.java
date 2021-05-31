@@ -65,17 +65,23 @@ public class MovieInfoActivity extends AppCompatActivity {
                     String test = response.body().string();
                     JSONObject obj = new JSONObject(test);
 
-                    movieName = (String) obj.get("Title");
-                    cast = (String) obj.get("Actors");
-                    plot = (String) obj.get("Plot");
-                    poster = (String) obj.get("Poster");
+                    String success = (String) obj.get("Response");
+                    if(success.equalsIgnoreCase("False")){
 
+                    }else{
+                        movieName = (String) obj.get("Title");
+                        cast = (String) obj.get("Actors");
+                        plot = (String) obj.get("Plot");
+                        poster = (String) obj.get("Poster");
+                    }
                     mHandler = new Handler(Looper.getMainLooper());
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Picasso.get().load(poster).into(iv_movieInfoMain);
-                            iv_movieInfoMain.setImageAlpha(255);
+                            if(!poster.isEmpty() && poster!=null) {
+                                Picasso.get().load(poster).into(iv_movieInfoMain);
+                                iv_movieInfoMain.setImageAlpha(255);
+                            }
                             tv_movieInfoName.setText(movieName);
                             tv_movieInfoCast.setText(cast);
                             tv_movieInfoDesc.setText(plot);

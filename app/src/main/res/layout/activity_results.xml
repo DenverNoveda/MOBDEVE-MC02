@@ -33,20 +33,23 @@
                     app:srcCompat="@drawable/accountbox_icon" />
 
                 <TextView
-                    android:id="@+id/tv_resultsSearch"
+                    android:id="@+id/tv_watchCorner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="SEARCH BY GENRE/MOST POPULAR/COMING SOON"
-                    android:textColor="#eeeeee"
+                    android:layout_marginStart="154dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="154dp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="WatchCorner"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <EditText
                     android:id="@+id/et_resultsSearchParam"
-                    android:layout_width="220dp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="12dp"
@@ -57,35 +60,34 @@
                     android:textColor="#eeeeee"
                     android:textColorHint="#eeeeee"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_resultsSearch" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_watchCorner" />
 
                 <Button
                     android:id="@+id/btn_resultsFilter"
                     android:layout_width="wrap_content"
-                    android:layout_height="50sp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:backgroundTint="#393e46"
+                    android:layout_height="40sp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="#393e46"
                     android:text="Filter"
+                    android:textSize="15sp"
                     app:cornerRadius="10dp"
                     app:layout_constraintStart_toEndOf="@+id/btn_resultsSearch"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_resultsSearch" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_watchCorner" />
 
                 <Button
                     android:id="@+id/btn_resultsSearch"
-                    android:layout_width="40sp"
-                    android:layout_height="50sp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:backgroundTint="#393e46"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="16dp"
-                    android:textSize="12sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40sp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="12dp"
+                    android:background="#393e46"
+                    android:text="Search"
+                    android:textSize="15sp"
                     app:cornerRadius="15dp"
-                    app:icon="@drawable/search_icon"
                     app:iconTint="#eeeeee"
                     app:layout_constraintStart_toEndOf="@+id/et_resultsSearchParam"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_resultsSearch"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_watchCorner"
                     app:strokeColor="#FFFFFF" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

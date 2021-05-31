@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -22,15 +24,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class MainMenuActivity extends AppCompatActivity {
 
     private String addressPop = "";
     private String addressComingSoon = "";
-    private int listSize;
+    private int popListSize, soonListSize;
     private Elements popMoviesListAlpha, popNamesListAlpha, popLinksListAlpha;
     private Elements soonMoviesListAlpha, soonNamesListAlpha, soonLinksListAlpha;
     private List<String> popNamesList, popLinksList, popImgList, popMovieIDList;
-    private List<String> soonNamesList, soonLinksList, soonImgList;
+    private List<String> soonNamesList, soonLinksList, soonImgList,soonMovieIDList;
     private List<Document> docList;
     private Document doc;
     private ArrayList<Movie> resultsPopular;
@@ -38,10 +44,10 @@ public class MainMenuActivity extends AppCompatActivity {
     private Handler mHandler;
     private RecyclerView popularRecyclerView;
     private RecyclerView comingSoonRecyclerView;
-    private RecyclerView.Adapter myAdapter1;
-    private LinearLayoutManager myManager1;
-    private RecyclerView.Adapter myAdapter2;
-    private LinearLayoutManager myManager2;
+    private RecyclerView.Adapter popAdapter;
+    private LinearLayoutManager popManager;
+    private RecyclerView.Adapter soonAdapter;
+    private LinearLayoutManager soonManager;
 
     private TextView tv_seeMorePopular;
     private TextView tv_seeMoreComingSoon;
@@ -63,7 +69,7 @@ public class MainMenuActivity extends AppCompatActivity {
         resultsPopular = new ArrayList<>();
         resultsComingSoon = new ArrayList<>();
         loadMostPopular();
-//        loadComingSoon();
+        loadComingSoon();
 
         setUpPopularRecyclerView();
 
@@ -72,6 +78,7 @@ public class MainMenuActivity extends AppCompatActivity {
         this.tv_searchByGenre = findViewById(R.id.tv_searchByGenre);
         Log.d("SETUP", "OnCreate Done");
 
+
         this.tv_searchByGenre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,15 +86,31 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        this.tv_seeMorePopular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainMenuActivity.this, ResultsActivity.class);
+                i.setAction("LOAD_MORE_POPULAR");
+                startActivity(i);
+            }
+        });
+        this.tv_seeMoreComingSoon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainMenuActivity.this, ResultsActivity.class);
+                i.setAction("LOAD_MORE_COMING_SOON");
+                startActivity(i);
+            }
+        });
     }
 
     private void loadMostPopular() {
-        addressPop = "https://m.imdb.com/search/title/?groups=top_100";
+        addressPop = "https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm";
         getDataMostPopular();
     }
 
     private void loadComingSoon(){
-        addressComingSoon = "https://www.imdb.com/search/title/?user_rating=8.0,10.0";
+        addressComingSoon = "https://www.imdb.com/movies-coming-soon/?ref_=nv_mv_cs";
         getDataComingSoon();
     }
     private void fillPopularArray(){
@@ -111,6 +134,7 @@ public class MainMenuActivity extends AppCompatActivity {
             movie.setMovieName(soonNamesList.get(i));
             movie.setImage(soonImgList.get(i));
             movie.setLink(soonLinksList.get(i));
+            movie.setMovieID(soonMovieIDList.get(i));
 
             resultsComingSoon.add(movie);
         }
@@ -122,47 +146,50 @@ public class MainMenuActivity extends AppCompatActivity {
             public void run() {
                 try {
                     doc = Jsoup.connect(addressPop).get();
-                    popMoviesListAlpha = doc.select(".lister-item");
+                    popMoviesListAlpha = doc.select("td.posterColumn");
                     //Get list size
-                    listSize = popMoviesListAlpha.size();
+                    popListSize = popMoviesListAlpha.size();
                     //Get names elements
                     popNamesListAlpha = popMoviesListAlpha.select("img");
-                    popImgList = popNamesListAlpha.eachAttr("src");
                     popNamesList = popNamesListAlpha.eachAttr("alt");
+                    popImgList = popNamesListAlpha.eachAttr("src");
                     //Get first 10 elements;
-                    if(listSize>10){
+                    if(popListSize>10){
                         popNamesList = trimSelection(popNamesList);
                     }
                     //Get links elements
-                    popLinksListAlpha = doc.select("h3.lister-item-header");
+                    popLinksListAlpha = doc.select("td.posterColumn");
                     popLinksListAlpha = popLinksListAlpha.select("a");
                     popLinksList = popLinksListAlpha.eachAttr("href");
                     //Get first 10 elements;
-                    if(listSize>10){
+                    if(popListSize>10){
                         popLinksList = trimSelection(popLinksList);
-                        listSize = 10;
+                        popListSize = 10;
                     }
                     //Fix link elements
                     popMovieIDList = getMovieID(popLinksList);
                     popLinksList = fixLinkList(popLinksList);
 
-                    // Get Images
-                    //Get documents for image elements
-//                    popLinksList.stream().forEach(link -> {
+                    //API call for posters
+//                    for(int i = 0; i < popListSize; i++){
+//                        OkHttpClient client = new OkHttpClient();
+//
+//                        Request request = new Request.Builder()
+//                                .url("https://movie-database-imdb-alternative.p.rapidapi.com/?i=" + popMovieIDList.get(i) + "&r=json")
+//                                .get()
+//                                .addHeader("x-rapidapi-key", "3046c12cfdmsh5c0c9ec58a780edp111336jsnccb6948110d5")
+//                                .addHeader("x-rapidapi-host", "movie-database-imdb-alternative.p.rapidapi.com")
+//                                .build();
 //                        try {
-//                            Document document1 = Jsoup.connect(link).get();
-//                            docList.add(document1);
-//                        }catch (IOException e) {
+//                            Response response = client.newCall(request).execute();
+//                            String test = response.body().string();
+//                            JSONObject obj = new JSONObject(test);
+//
+//                            popImgList.add((String) obj.get("Poster"));
+//
+//                        }catch (IOException | JSONException e){
 //                            e.printStackTrace();
 //                        }
-//                    });
-//
-//                    for (int i = 0; i<listSize;  i++){
-//                        Document doc2 = docList.get(i);
-//                        Element poster = doc2.selectFirst(".poster");
-//                        Element img = poster.selectFirst("img");
-//                        popImgList.add(img.attr("src"));
-//                        Log.v("Image List Builder",img.attr("src") );
 //                    }
                     Log.v("End", "End of run");
 
@@ -171,7 +198,7 @@ public class MainMenuActivity extends AppCompatActivity {
                    mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            myAdapter1.notifyDataSetChanged();
+                            popAdapter.notifyDataSetChanged();
                         }
                     });
 
@@ -193,50 +220,53 @@ public class MainMenuActivity extends AppCompatActivity {
             public void run() {
                 try {
                     doc = Jsoup.connect(addressComingSoon).get();
-                    soonMoviesListAlpha = doc.select(".lister-item");
+                    soonMoviesListAlpha = doc.select("div.image");
                     //Get list size
-                    listSize = soonMoviesListAlpha.size();
+                    soonListSize = soonMoviesListAlpha.size();
                     //Get names elements
                     soonNamesListAlpha = soonMoviesListAlpha.select("img");
-                    soonNamesList = soonNamesListAlpha.eachAttr("alt");
+                    soonNamesList = soonNamesListAlpha.eachAttr("title");
+                    soonImgList =  soonNamesListAlpha.eachAttr("src");
                     //Get first 10 elements;
-                    if(listSize>10){
+                    if(soonListSize>10){
                         soonNamesList = trimSelection(soonNamesList);
                     }
                     //Get links elements
-                    soonLinksListAlpha = doc.select("h3.lister-item-header");
+                    soonLinksListAlpha = doc.select("div.image");
                     soonLinksListAlpha = soonLinksListAlpha.select("a");
                     soonLinksList = soonLinksListAlpha.eachAttr("href");
                     //Get first 10 elements;
-                    if(listSize>10){
+                    if(soonListSize>10){
                         soonLinksList = trimSelection(soonLinksList);
-                        listSize = 10;
+                        soonListSize = 10;
                     }
                     //Fix link elements
+                    soonMovieIDList = getMovieID(soonLinksList);
                     soonLinksList = fixLinkList(soonLinksList);
-                    //Get documents for image elements
-//                    soonLinksList.stream().forEach(link -> {
+                    //API call for posters
+//                    for(int i = 0; i < soonListSize; i++){
+//                        OkHttpClient client = new OkHttpClient();
+//
+//                        Request request = new Request.Builder()
+//                                .url("https://movie-database-imdb-alternative.p.rapidapi.com/?i=" + soonMovieIDList.get(i) + "&r=json")
+//                                .get()
+//                                .addHeader("x-rapidapi-key", "3046c12cfdmsh5c0c9ec58a780edp111336jsnccb6948110d5")
+//                                .addHeader("x-rapidapi-host", "movie-database-imdb-alternative.p.rapidapi.com")
+//                                .build();
 //                        try {
-//                            Document document1 = Jsoup.connect(link).get();
-//                            docList.add(document1);
-//                        }catch (IOException e) {
+//                            Response response = client.newCall(request).execute();
+//                            String test = response.body().string();
+//                            JSONObject obj = new JSONObject(test);
+//
+//                            soonImgList.add((String) obj.get("Poster"));
+//
+//                        }catch (IOException | JSONException e){
 //                            e.printStackTrace();
 //                        }
-//                    });
-//                    for (int i = 0; i<listSize;  i++){
-//                        Document doc2 = docList.get(i);
-//                        Element poster = doc2.selectFirst(".poster");
-//                        Element img = poster.selectFirst("img");
-//                        soonImgList.add(img.attr("src"));
-//                        Log.v("Image List Builder",img.attr("src") );
 //                    }
 
                     Log.v("End", "End of run");
 
-
-                    //Test list by printing
-                    //Iterator iterator = namesList.iterator();
-                    //testWrite(iterator);
 
 
                     fillComingSoonArray();
@@ -244,7 +274,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            myAdapter2.notifyDataSetChanged();
+                            soonAdapter.notifyDataSetChanged();
                         }
                     });
 
@@ -280,8 +310,10 @@ public class MainMenuActivity extends AppCompatActivity {
         String temp;
         for(int i = 0; i < list.size(); i++){
             temp = "";
-            for(int j = 7; j <=15; j++){
-                temp = temp + list.get(i).charAt(j);
+            for(int j = 7; j <=16; j++){
+                if(list.get(i).charAt(j) != '/'){
+                    temp = temp + list.get(i).charAt(j);
+                }
             }
             movieIDList.add(temp);
             Log.d("MOVIEID", temp);
@@ -292,13 +324,14 @@ public class MainMenuActivity extends AppCompatActivity {
     void setUpPopularRecyclerView(){
         this.popularRecyclerView = findViewById(R.id.popularRecyclerView);
         this.comingSoonRecyclerView = findViewById(R.id.comingSoonRecyclerView);
-        this.myManager1 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        this.myManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        this.popularRecyclerView.setLayoutManager(this.myManager1);
-        this.comingSoonRecyclerView.setLayoutManager(this.myManager2);
-        this.myAdapter1 = new MovieListAdapter(this.resultsPopular);
-        this.popularRecyclerView.setAdapter(myAdapter1);
-        this.myAdapter2 = new MovieListAdapter(this.resultsComingSoon);
-        this.comingSoonRecyclerView.setAdapter(myAdapter2);
+        this.popManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        this.soonManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        this.popularRecyclerView.setLayoutManager(this.popManager);
+        this.comingSoonRecyclerView.setLayoutManager(this.soonManager);
+        this.popAdapter = new MovieListAdapter(this.resultsPopular);
+        this.popularRecyclerView.setAdapter(popAdapter);
+        this.soonAdapter = new MovieListAdapter(this.resultsComingSoon);
+        this.comingSoonRecyclerView.setAdapter(soonAdapter);
     }
+
 }
