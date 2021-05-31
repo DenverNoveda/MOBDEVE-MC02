@@ -12,12 +12,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -26,32 +23,35 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 public class MainMenuActivity extends AppCompatActivity {
 
-    private String addressPop = "";
+    private String addressPopMovies = "";
+    private String addressPopShows = "";
     private String addressComingSoon = "";
-    private int popListSize, soonListSize;
+    private int popMoviesListSize, popShowsListSize, soonListSize;
     private Elements popMoviesListAlpha, popNamesListAlpha, popLinksListAlpha;
     private Elements soonMoviesListAlpha, soonNamesListAlpha, soonLinksListAlpha;
+    private Elements popShowsListAlpha, popShowsNamesListAlpha, popShowsLinksListAlpha;
     private List<String> popNamesList, popLinksList, popImgList, popMovieIDList;
+    private List<String> popShowsNamesList, popShowsLinksList, popShowsImgList, popShowsIDList;
     private List<String> soonNamesList, soonLinksList, soonImgList,soonMovieIDList;
-    private List<Document> docList;
     private Document doc;
-    private ArrayList<Movie> resultsPopular;
+    private ArrayList<Movie> resultsPopMovies;
     private ArrayList<Movie> resultsComingSoon;
+    private ArrayList<Movie> resultsPopShows;
     private Handler mHandler;
-    private RecyclerView popularRecyclerView;
+    private RecyclerView popularMoviesRecyclerView;
+    private RecyclerView popularShowsRecyclerView;
     private RecyclerView comingSoonRecyclerView;
-    private RecyclerView.Adapter popAdapter;
-    private LinearLayoutManager popManager;
+    private RecyclerView.Adapter popMoviesAdapter;
+    private LinearLayoutManager popMovieManager;
+    private RecyclerView.Adapter popShowsAdapter;
+    private LinearLayoutManager popShowsManager;
     private RecyclerView.Adapter soonAdapter;
     private LinearLayoutManager soonManager;
 
-    private TextView tv_seeMorePopular;
+    private TextView tv_seeMorePopularMovies;
+    private TextView tv_seeMorePopularShows;
     private TextView tv_seeMoreComingSoon;
     private TextView tv_searchByGenre;
 
@@ -62,22 +62,28 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        docList = new ArrayList<>();
         popNamesList = new ArrayList<>();
         popLinksList = new ArrayList<>();
         popImgList = new ArrayList<>();
+        popShowsNamesList = new ArrayList<>();
+        popShowsLinksList = new ArrayList<>();
+        popShowsImgList = new ArrayList<>();
         soonImgList = new ArrayList<>();
         soonLinksList = new ArrayList<>();
         soonNamesList = new ArrayList<>();
 
-        resultsPopular = new ArrayList<>();
+        resultsPopMovies = new ArrayList<>();
+        resultsPopShows = new ArrayList<>();
         resultsComingSoon = new ArrayList<>();
-        loadMostPopular();
+
+        loadMostPopMovies();
+        loadMostPopShows();
         loadComingSoon();
 
         setUpPopularRecyclerView();
 
-        this.tv_seeMorePopular = findViewById(R.id.tv_seeMorePopMovies);
+        this.tv_seeMorePopularMovies = findViewById(R.id.tv_seeMorePopMovies);
+        this.tv_seeMorePopularShows = findViewById(R.id.tv_seeMorePopShows);
         this.tv_seeMoreComingSoon = findViewById(R.id.tv_seeMoreComingSoonMovies);
         this.tv_searchByGenre = findViewById(R.id.tv_searchByGenre);
         this.iv_goToProfile = findViewById(R.id.iv_goToProfile);
@@ -101,11 +107,19 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        this.tv_seeMorePopular.setOnClickListener(new View.OnClickListener() {
+        this.tv_seeMorePopularMovies.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainMenuActivity.this, ResultsActivity.class);
-                i.setAction("LOAD_MORE_POPULAR");
+                i.setAction("LOAD_MORE_POPULAR_MOVIES");
+                startActivity(i);
+            }
+        });
+        this.tv_seeMorePopularShows.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainMenuActivity.this, ResultsActivity.class);
+                i.setAction("LOAD_MORE_POPULAR_SHOWS");
                 startActivity(i);
             }
         });
@@ -119,16 +133,20 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
-    private void loadMostPopular() {
-        addressPop = "https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm";
-        getDataMostPopular();
+    private void loadMostPopMovies() {
+        addressPopMovies = "https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm";
+        getDataPopMovies();
+    }
+    private void loadMostPopShows() {
+        addressPopShows = "https://www.imdb.com/chart/tvmeter/?ref_=nv_tvv_mptv";
+        getDataPopShows();
     }
 
     private void loadComingSoon(){
         addressComingSoon = "https://www.imdb.com/movies-coming-soon/?ref_=nv_mv_cs";
         getDataComingSoon();
     }
-    private void fillPopularArray(){
+    private void fillPopularMoviesArray(){
         for(int i = 0; i< popNamesList.size(); i++){
             Movie movie = new Movie();
             Log.d("Name", popNamesList.get(i));
@@ -138,7 +156,20 @@ public class MainMenuActivity extends AppCompatActivity {
             movie.setImage(popImgList.get(i));
             movie.setLink(popLinksList.get(i));
             movie.setMovieID(popMovieIDList.get(i));
-            resultsPopular.add(movie);
+            resultsPopMovies.add(movie);
+        }
+    }
+    private void fillPopularShowsArray(){
+        for(int i = 0; i< popShowsNamesList.size(); i++){
+            Movie movie = new Movie();
+            Log.d("Name", popShowsNamesList.get(i));
+            Log.d("Link", popShowsLinksList.get(i));
+            Log.d("Img", popShowsImgList.get(i));
+            movie.setMovieName(popShowsNamesList.get(i));
+            movie.setImage(popShowsImgList.get(i));
+            movie.setLink(popShowsLinksList.get(i));
+            movie.setMovieID(popShowsIDList.get(i));
+            resultsPopShows.add(movie);
         }
     }
     private void fillComingSoonArray(){
@@ -154,22 +185,22 @@ public class MainMenuActivity extends AppCompatActivity {
             resultsComingSoon.add(movie);
         }
     }
-    private void getDataMostPopular() {
+    private void getDataPopMovies() {
         Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
                 try {
-                    doc = Jsoup.connect(addressPop).get();
+                    doc = Jsoup.connect(addressPopMovies).get();
                     popMoviesListAlpha = doc.select("td.posterColumn");
                     //Get list size
-                    popListSize = popMoviesListAlpha.size();
+                    popShowsListSize = popMoviesListAlpha.size();
                     //Get names elements
                     popNamesListAlpha = popMoviesListAlpha.select("img");
                     popNamesList = popNamesListAlpha.eachAttr("alt");
                     popImgList = popNamesListAlpha.eachAttr("src");
                     //Get first 10 elements;
-                    if(popListSize>10){
+                    if(popMoviesListSize >10){
                         popNamesList = trimSelection(popNamesList);
                     }
                     //Get links elements
@@ -177,46 +208,75 @@ public class MainMenuActivity extends AppCompatActivity {
                     popLinksListAlpha = popLinksListAlpha.select("a");
                     popLinksList = popLinksListAlpha.eachAttr("href");
                     //Get first 10 elements;
-                    if(popListSize>10){
+                    if(popMoviesListSize >10){
                         popLinksList = trimSelection(popLinksList);
-                        popListSize = 10;
+                        popMoviesListSize = 10;
                     }
                     //Fix link elements
                     popMovieIDList = getMovieID(popLinksList);
                     popLinksList = fixLinkList(popLinksList);
 
-                    //API call for posters
-//                    for(int i = 0; i < popListSize; i++){
-//                        OkHttpClient client = new OkHttpClient();
-//
-//                        Request request = new Request.Builder()
-//                                .url("https://movie-database-imdb-alternative.p.rapidapi.com/?i=" + popMovieIDList.get(i) + "&r=json")
-//                                .get()
-//                                .addHeader("x-rapidapi-key", "3046c12cfdmsh5c0c9ec58a780edp111336jsnccb6948110d5")
-//                                .addHeader("x-rapidapi-host", "movie-database-imdb-alternative.p.rapidapi.com")
-//                                .build();
-//                        try {
-//                            Response response = client.newCall(request).execute();
-//                            String test = response.body().string();
-//                            JSONObject obj = new JSONObject(test);
-//
-//                            popImgList.add((String) obj.get("Poster"));
-//
-//                        }catch (IOException | JSONException e){
-//                            e.printStackTrace();
-//                        }
-//                    }
-                    Log.v("End", "End of run");
-
-                   fillPopularArray();
-                   mHandler = new Handler(Looper.getMainLooper());
-                   mHandler.post(new Runnable() {
+                    fillPopularMoviesArray();
+                    mHandler = new Handler(Looper.getMainLooper());
+                    mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            popAdapter.notifyDataSetChanged();
+                            popMoviesAdapter.notifyDataSetChanged();
                         }
                     });
 
+                    Log.v("End", "End of run");
+                    Log.v("getData", "Finished ");
+
+
+                } catch (IOException e) {
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void getDataPopShows() {
+        Thread thread = new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void run() {
+                try {
+                    doc = Jsoup.connect(addressPopShows).get();
+                    popShowsListAlpha = doc.select("td.posterColumn");
+                    //Get list size
+                    popShowsListSize = popShowsListAlpha.size();
+                    //Get names elements
+                    popShowsNamesListAlpha = popShowsListAlpha.select("img");
+                    popShowsNamesList = popShowsNamesListAlpha.eachAttr("alt");
+                    popShowsImgList = popShowsNamesListAlpha.eachAttr("src");
+                    //Get first 10 elements;
+                    if(popShowsListSize >10){
+                        popShowsNamesList = trimSelection(popShowsNamesList);
+                    }
+                    //Get links elements
+                    popShowsLinksListAlpha = doc.select("td.posterColumn");
+                    popShowsLinksListAlpha = popShowsLinksListAlpha.select("a");
+                    popShowsLinksList = popShowsLinksListAlpha.eachAttr("href");
+                    //Get first 10 elements;
+                    if(popShowsListSize >10){
+                        popShowsLinksList = trimSelection(popShowsLinksList);
+                        popShowsListSize = 10;
+                    }
+                    //Fix link elements
+                    popShowsIDList = getMovieID(popShowsLinksList);
+                    popShowsLinksList = fixLinkList(popShowsLinksList);
+
+                    fillPopularShowsArray();
+                    mHandler = new Handler(Looper.getMainLooper());
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            popShowsAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+                    Log.v("End", "End of run");
                     Log.v("getData", "Finished ");
 
 
@@ -257,31 +317,6 @@ public class MainMenuActivity extends AppCompatActivity {
                     //Fix link elements
                     soonMovieIDList = getMovieID(soonLinksList);
                     soonLinksList = fixLinkList(soonLinksList);
-                    //API call for posters
-//                    for(int i = 0; i < soonListSize; i++){
-//                        OkHttpClient client = new OkHttpClient();
-//
-//                        Request request = new Request.Builder()
-//                                .url("https://movie-database-imdb-alternative.p.rapidapi.com/?i=" + soonMovieIDList.get(i) + "&r=json")
-//                                .get()
-//                                .addHeader("x-rapidapi-key", "3046c12cfdmsh5c0c9ec58a780edp111336jsnccb6948110d5")
-//                                .addHeader("x-rapidapi-host", "movie-database-imdb-alternative.p.rapidapi.com")
-//                                .build();
-//                        try {
-//                            Response response = client.newCall(request).execute();
-//                            String test = response.body().string();
-//                            JSONObject obj = new JSONObject(test);
-//
-//                            soonImgList.add((String) obj.get("Poster"));
-//
-//                        }catch (IOException | JSONException e){
-//                            e.printStackTrace();
-//                        }
-//                    }
-
-                    Log.v("End", "End of run");
-
-
 
                     fillComingSoonArray();
                     mHandler = new Handler(Looper.getMainLooper());
@@ -291,7 +326,7 @@ public class MainMenuActivity extends AppCompatActivity {
                             soonAdapter.notifyDataSetChanged();
                         }
                     });
-
+                    Log.v("End", "End of run");
                     Log.v("getData", "Finished ");
 
                 } catch (IOException e) {
@@ -335,16 +370,22 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     void setUpPopularRecyclerView(){
-        this.popularRecyclerView = findViewById(R.id.popularRecyclerView);
+        this.popularMoviesRecyclerView = findViewById(R.id.popMoviesRecyclerView);
         this.comingSoonRecyclerView = findViewById(R.id.comingSoonRecyclerView);
-        this.popManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        this.popularShowsRecyclerView = findViewById(R.id.popShowsRecyclerView);
+        this.popMovieManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        this.popShowsManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         this.soonManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        this.popularRecyclerView.setLayoutManager(this.popManager);
+        this.popularMoviesRecyclerView.setLayoutManager(this.popMovieManager);
+        this.popularShowsRecyclerView.setLayoutManager(this.popShowsManager);
         this.comingSoonRecyclerView.setLayoutManager(this.soonManager);
-        this.popAdapter = new MovieListAdapter(this.resultsPopular);
-        this.popularRecyclerView.setAdapter(popAdapter);
+        this.popMoviesAdapter = new MovieListAdapter(this.resultsPopMovies);
+        this.popularMoviesRecyclerView.setAdapter(popMoviesAdapter);
+        this.popShowsAdapter = new MovieListAdapter(resultsPopShows);
+        this.popularShowsRecyclerView.setAdapter(popShowsAdapter);
         this.soonAdapter = new MovieListAdapter(this.resultsComingSoon);
         this.comingSoonRecyclerView.setAdapter(soonAdapter);
+
     }
 
 }

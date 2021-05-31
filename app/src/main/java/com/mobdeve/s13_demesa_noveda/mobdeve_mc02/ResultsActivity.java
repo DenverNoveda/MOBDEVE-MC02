@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -69,6 +70,7 @@ public class ResultsActivity extends AppCompatActivity {
     private Button btn_resultsFilterDrama;
 
     private EditText et_resultsSearchParam;
+    private TextView tv_resultsWatchCorner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +83,12 @@ public class ResultsActivity extends AppCompatActivity {
         results = new ArrayList<>();
         Intent i = getIntent();
         if(i.getAction()!=null){
-            if(i.getAction().equalsIgnoreCase("LOAD_MORE_POPULAR")){
+            if(i.getAction().equalsIgnoreCase("LOAD_MORE_POPULAR_MOVIES")){
                 address = "https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm";
+                results.clear();
+                getDataMostPopular();
+            }else if(i.getAction().equalsIgnoreCase("LOAD_MORE_POPULAR_SHOWS")){
+                address = "https://www.imdb.com/chart/tvmeter/?ref_=nv_tvv_mptv";
                 results.clear();
                 getDataMostPopular();
             }else if(i.getAction().equalsIgnoreCase("LOAD_MORE_COMING_SOON")){
@@ -95,6 +101,7 @@ public class ResultsActivity extends AppCompatActivity {
         this.btn_searchResults = findViewById(R.id.btn_resultsSearch);
         this.et_resultsSearchParam = findViewById(R.id.et_resultsSearchParam);
         this.btn_resultsFilter = findViewById(R.id.btn_resultsFilter);
+        this.tv_resultsWatchCorner = findViewById(R.id.tv_resultsWatchCorner);
         this.results_FilterConstraintLayout = findViewById(R.id.results_FilterConstraintLayout);
         setUpFilterButtons();
 
@@ -116,6 +123,14 @@ public class ResultsActivity extends AppCompatActivity {
                 }
             }
         });
+        this.tv_resultsWatchCorner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ResultsActivity.this, MainMenuActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
     private void fillResults(){
         for(int i = 0; i< namesList.size(); i++){
@@ -131,6 +146,7 @@ public class ResultsActivity extends AppCompatActivity {
     }
     public void titleSearch(){
         genres = "";
+        address = "https://www.imdb.com/search/title/?";
         docList.clear();
         namesList.clear();
         linksList.clear();
@@ -139,15 +155,20 @@ public class ResultsActivity extends AppCompatActivity {
         filterGenres();
         String query = et_resultsSearchParam.getText().toString();
         query = query.replace(" ", "+");
-        address = "https://www.imdb.com/search/title/?title=" + query;
-        if(!genres.isEmpty())
-            address = "https://m.imdb.com/search/title/?title="+ query + "&genres=" + genres;
-        if(query.equals("")){
-            Toast.makeText(this, "Please enter a query", Toast.LENGTH_LONG).show();
-        }else{
+
+        if(!query.isEmpty() || !genres.isEmpty()){
+            if(!query.isEmpty()){
+                address = address + "title=" + query;
+            }
+            if(!genres.isEmpty()){
+                address = address + "&genres=" + genres;
+            }
             //Start jSoup function
             Toast.makeText(this, "Loading results...", Toast.LENGTH_LONG).show();
             getDataTitleSearch();
+
+        }else{
+            Toast.makeText(this, "Please enter a query", Toast.LENGTH_LONG).show();
         }
     }
     public void filterGenres(){
@@ -172,12 +193,6 @@ public class ResultsActivity extends AppCompatActivity {
                     moviesList = doc.select(".lister-item-image");
                     //Get list size
                     listSize = moviesList.size();
-                    //Get names elements
-//                    namesListAlpha = moviesList.select("img");
-//                    imgListAlpha = moviesList.select("img");
-//                    namesList = namesListAlpha.eachAttr("alt");
-//                    imgList = imgListAlpha.eachAttr("src");
-                    //Get links elements
                     linksListAlpha = doc.select("div.lister-item-image");
                     linksListAlpha = linksListAlpha.select("a");
                     linksList = linksListAlpha.eachAttr("href");
